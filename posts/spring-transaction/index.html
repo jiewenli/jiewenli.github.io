@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  
+  <link rel="next" href="https://blog.rua.run/posts/java-class-init/" />
+  <link rel="canonical" href="https://blog.rua.run/posts/spring-transaction/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           Spring事务 | Note
+       
+  </title>
+  <meta name="title" content="Spring事务 | Note">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.rua.run"
+    },
+    "articleSection" : "posts",
+    "name" : "Spring事务",
+    "headline" : "Spring事务",
+    "description" : "Spring事务",
+    "inLanguage" : "zh-CN",
+    "author" : "jiewen",
+    "creator" : "jiewen",
+    "publisher": "jiewen",
+    "accountablePerson" : "jiewen",
+    "copyrightHolder" : "jiewen",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-09-26 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-09-26 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/blog.rua.run\/posts\/spring-transaction\/",
+    "wordCount" : "83",
+    "keywords" : [  "Note"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <a class="menu-item" href="/about/" title=""></a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <a class="menu-item" href="/about/" title=""></a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Spring事务</h1>
+        <div class="post-meta">
+            Written by <a itemprop="name" href="https://blog.rua.run"
+                rel="author">jiewen</a>
+            with ♥
+            <span class="post-time">
+                on <time datetime=2019-09-26
+                    itemprop="datePublished">2019-09-26</time>
+            </span>
+            in
+            <i class="iconfont icon-folder"></i>
+            <span class="post-category">
+                <a href="https://blog.rua.run/categories/spring/"> spring </a>
+                <a href="https://blog.rua.run/categories/java/"> java </a>
+                
+            </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+
+        
+        
+        
+
+        
+        
+        
+
+        <h2 id="事务属性的种类">事务属性的种类：</h2>
+<p><strong>传播行为</strong>、<strong>隔离级别</strong>、<strong>只读和事务超时</strong></p>
+<ul>
+<li>
+<p>a)   传播行为定义了被调用方法的事务边界。</p>
+<table>
+<thead>
+<tr>
+<th>传播行为</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PROPERGATION_MANDATORY</td>
+<td>表示方法必须运行在一个事务中，如果当前事务不存在，就抛出异常</td>
+</tr>
+<tr>
+<td>PROPAGATION_NESTED</td>
+<td>表示如果当前事务存在，则方法应该运行在一个嵌套事务中。否则，它看起来和 PROPAGATION_REQUIRED 看起来没什么两样</td>
+</tr>
+<tr>
+<td>PROPAGATION_NEVER</td>
+<td>表示方法不能运行在一个事务中，否则抛出异常</td>
+</tr>
+<tr>
+<td>PROPAGATION_NOT_SUPPORTED</td>
+<td>表示方法不能运行在一个事务中，如果当前存在一个事务，则该方法将被挂起</td>
+</tr>
+<tr>
+<td>PROPAGATION_REQUIRED</td>
+<td>表示当前方法必须运行在一个事务中，如果当前存在一个事务，那么该方法运行在这个事务中，否则，将创建一个新的事务</td>
+</tr>
+<tr>
+<td>PROPAGATION_REQUIRES_NEW</td>
+<td>表示当前方法必须运行在自己的事务中，如果当前存在一个事务，那么这个事务将在该方法运行期间被挂起</td>
+</tr>
+<tr>
+<td>PROPAGATION_SUPPORTS</td>
+<td>表示当前方法不需要运行在一个是事务中，但如果有一个事务已经存在，该方法也可以运行在这个事务中</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>b)   隔离级别</p>
+<p>在操作数据时可能带来 3 个副作用，分别是<strong>脏读</strong>、<strong>不可重复读</strong>、<strong>幻读</strong>。
+为了避免这 3 中副作用的发生，在标准的 SQL 语句中定义了 4 种隔离级别，分别是<strong>未提交读</strong>、<strong>已提交读</strong>、<strong>可重复读</strong>、<strong>可序列化</strong>。
+而在 spring 事务中提供了 5 种隔离级别来对应在 SQL 中定义的 4 种隔离级别，如下：</p>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ISOLATION_DEFAULT</td>
+<td>使用后端数据库默认的隔离级别</td>
+</tr>
+<tr>
+<td>ISOLATION_READ_UNCOMMITTED</td>
+<td>允许读取未提交的数据（对应未提交读），可能导致脏读、不可重复读、幻读</td>
+</tr>
+<tr>
+<td>ISOLATION_READ_COMMITTED</td>
+<td>允许在一个事务中读取另一个已经提交的事务中的数据（对应已提交读）。可以避免脏读，但是无法避免不可重复读和幻读</td>
+</tr>
+<tr>
+<td>ISOLATION_REPEATABLE_READ</td>
+<td>一个事务不可能更新由另一个事务修改但尚未提交（回滚）的数据（对应可重复读）。可以避免脏读和不可重复读，但无法避免幻读</td>
+</tr>
+<tr>
+<td>ISOLATION_SERIALIZABLE</td>
+<td>这种隔离级别是所有的事务都在一个执行队列中，依次顺序执行，而不是并行（对应可序列化）。可以避免脏读、不可重复读、幻读。但是这种隔离级别效率很低，因此，除非必须，否则不建议使用。</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>c)只读</p>
+<p>如果在一个事务中所有关于数据库的操作都是只读的，也就是说，这些操作只读取数据库中的数据，而并不更新数据，那么应将事务设为只读模式（ READ_ONLY_MARKER ） , 这样更有利于数据库进行优化 。</p>
+<p>因为只读的优化措施是事务启动后由数据库实施的，因此，只有将那些具有可能启动新事务的传播行为 (PROPAGATION_NESTED 、 PROPAGATION_REQUIRED 、 PROPAGATION_REQUIRED_NEW) 的方法的事务标记成只读才有意义。</p>
+<p>如果使用 Hibernate 作为持久化机制，那么将事务标记为只读后，会将 Hibernate 的 flush 模式设置为 FULSH_NEVER, 以告诉 Hibernate 避免和数据库之间进行不必要的同步，并将所有更新延迟到事务结束。</p>
+</li>
+<li>
+<p>d)   事务超时</p>
+<p>如果一个事务长时间运行，这时为了尽量避免浪费系统资源，应为这个事务设置一个有效时间，使其等待数秒后自动回滚。与设置“只读”属性一样，事务有效属性也需要给那些具有可能启动新事物的传播行为的方法的事务标记成只读才有意义。</p>
+</li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+        
+
+        
+        <p class="copyright-item">
+            <span>Link:</span>
+            <a href=https://blog.rua.run/posts/spring-transaction/>https://blog.rua.run/posts/spring-transaction/</span>
+        </p>
+        
+        
+    </div>
+
+
+    <div class="post-tags">
+        
+        <section>
+            <a href="javascript:window.history.back();">back</a></span> ·
+            <span><a href="https://blog.rua.run">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        
+        <a href="https://blog.rua.run/posts/java-class-init/" class="next" rel="next"
+            title="java类初始化详解">java类初始化详解&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+        
+        
+    </div>
+    
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>spring-boot on Note</title>
+    <link>https://blog.rua.run/categories/spring-boot/</link>
+    <description>Recent content in spring-boot on Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 09 Oct 2019 10:43:46 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rua.run/categories/spring-boot/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>spring-boot中处理异常的几种方式</title>
+      <link>https://blog.rua.run/posts/several-ways-to-handle-exceptions-in-spring-boot/</link>
+      <pubDate>Wed, 09 Oct 2019 10:43:46 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/posts/several-ways-to-handle-exceptions-in-spring-boot/</guid>
+      <description>使用@ControllerAdvice 和 @ExceptionHandler 处理异常 这种方式比较通用，也能对异常统一处理
+/** * */ @ControllerAdvice(assignableTypes = {ExceptionController.class}) @ResponseBody public class GlobalExceptionHandler { ErrorResponse illegalArgumentResponse = new ErrorResponse(new IllegalArgumentException(&amp;#34;参数错误!&amp;#34;)); ErrorResponse resourseNotFoundResponse = new ErrorResponse(new ResourceNotFoundException(&amp;#34;Sorry, the resourse not found!&amp;#34;)); @ExceptionHandler(value = Exception.class)// 拦截所有异常, 这里只是为了演示，一般情况下一个方法特定处理一种异常  public ResponseEntity&amp;lt;ErrorResponse&amp;gt; exceptionHandler(Exception e) { if (e instanceof IllegalArgumentException) { return ResponseEntity.status(400).body(illegalArgumentResponse); } else if (e instanceof ResourceNotFoundException) { return ResponseEntity.status(404).body(resourseNotFoundResponse); } return null; } } ResponseStatusException MyResourceNotFoundException.java
+@ResponseStatus(code = HttpStatus.NOT_FOUND) public class MyResourceNotFoundException extends RuntimeException { public MyResourceNotFoundException(){ } public MyResourceNotFoundException(String message){ super(message); } } Controller.</description>
+    </item>
+    
+  </channel>
+</rss>

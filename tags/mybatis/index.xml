@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>mybatis on Note</title>
+    <link>https://blog.rua.run/tags/mybatis/</link>
+    <description>Recent content in mybatis on Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 27 Apr 2020 23:28:47 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rua.run/tags/mybatis/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>mybatis学习笔记</title>
+      <link>https://blog.rua.run/posts/mybatis/mybatis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 27 Apr 2020 23:28:47 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/posts/mybatis/mybatis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>一、JDBC存在的问题以及解决方案    存在问题 解决方案     1数据库配置信息存在硬编码问题 配置文件   频繁创建释放数据库连接 连接池   sql语句、设置参数、返回参数存在硬编码问题 配置文件   手动封装结果集 反射、内省    二、框架简单分析 用户端  引入框架 数据库配置 sql配置  框架端  加载解析配置并保存在对象 提供会话对象来对数据库操作 操作jdbc sql拼接和参数映射 返回结果集映射实体 使用优化  减少dao层重复代码 根据sql配置与dao层类一对一的关系，建立约定，减少了硬编码 使用动态代理，减少大量实现类定义    三、mybatis应用回顾以及高级应用 mybatis优缺点 mybatis是一个半自动化的持久化层框架。sql与java编码分离，sql性能可以开发自行保证，功能边界清晰，扩展简单。缓存机制不佳，
+配置文件 Configuration
+ properties 属性 settings 设置 typeAliases 类型别名 typehandlers 类型处理器 objectFactory 对象工厂 plugins 插件 environments 环境  environment 环境变量  transactionManager 事务管理器 dataSource 数据源     databaseIdProvider 数据库厂商标识 mappers 映射器  mybatis复杂映射开发 一对一 实体</description>
+    </item>
+    
+  </channel>
+</rss>

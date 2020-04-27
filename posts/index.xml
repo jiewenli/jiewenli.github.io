@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Note</title>
+    <link>https://blog.rua.run/posts/</link>
+    <description>Recent content in Posts on Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 27 Apr 2020 23:28:47 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rua.run/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>mybatis学习笔记</title>
+      <link>https://blog.rua.run/posts/mybatis/mybatis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 27 Apr 2020 23:28:47 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/posts/mybatis/mybatis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>一、JDBC存在的问题以及解决方案    存在问题 解决方案     1数据库配置信息存在硬编码问题 配置文件   频繁创建释放数据库连接 连接池   sql语句、设置参数、返回参数存在硬编码问题 配置文件   手动封装结果集 反射、内省    二、框架简单分析 用户端  引入框架 数据库配置 sql配置  框架端  加载解析配置并保存在对象 提供会话对象来对数据库操作 操作jdbc sql拼接和参数映射 返回结果集映射实体 使用优化  减少dao层重复代码 根据sql配置与dao层类一对一的关系，建立约定，减少了硬编码 使用动态代理，减少大量实现类定义    三、mybatis应用回顾以及高级应用 mybatis优缺点 mybatis是一个半自动化的持久化层框架。sql与java编码分离，sql性能可以开发自行保证，功能边界清晰，扩展简单。缓存机制不佳，
+配置文件 Configuration
+ properties 属性 settings 设置 typeAliases 类型别名 typehandlers 类型处理器 objectFactory 对象工厂 plugins 插件 environments 环境  environment 环境变量  transactionManager 事务管理器 dataSource 数据源     databaseIdProvider 数据库厂商标识 mappers 映射器  mybatis复杂映射开发 一对一 实体</description>
+    </item>
+    
+    <item>
+      <title>深入java虚拟机读书笔记</title>
+      <link>https://blog.rua.run/posts/%E6%B7%B1%E5%85%A5java%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Tue, 18 Feb 2020 19:28:17 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/posts/%E6%B7%B1%E5%85%A5java%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</guid>
+      <description>平台无关 为什么要平台无关 减少开发在多个平台部署应用的时间和成本
+Java的体系结构对平台无关的支持  java平台（虚拟机）扮演着程序与硬件和操作系统的缓冲角色，java程序被编译成可运行在虚拟机的二进制程序 Java语言基本类型是独立定义的，确保基本数据类型在所有平台上的一致性 javaclass文件，是特定java虚拟机的二进制文件，不同平台都可以装入和运行 可伸缩性，针对不同平台，最大资源不同，有不同标准库的子集或超集  影响平台无关性的因素  java平台的部署，所有设备上都需要拥有java平台的实现 java平台的版本，子集的运行环境不能支持需要超集运行环境的程序，虽然java平台尽可能保住向上兼容性，但是还是有些许不同，需要确定最小支持版本 本地方法，不要调用平台独立的直接或间接方法 非标准运行时库，java平台可能有多个厂商实现的版本，除了标准API的实现外可能还提供了平台独立的本地方法 对虚拟机的依赖，不要依赖finalization来达到程序正确性，不要依赖线程的优先级来达到程序的正确性（必须依赖同步来实现） 对用户界面的依赖，不同平台的实现不同，组件间的交互也不同 不同平台都需要测试，在程序运行的不同主机和不同java平台上测试是保证品台无关性的因素 平台无关的七个步骤  平台无关性的策略 最小公分母问题，所有java平台的开发商按照JavaApi标准，但允许性能和扩展领域存在差异，这就需要开发人员在平台无关和其它因素之间考虑
+安全 为什么需要安全 因为网络提供了一条攻击连入计算机的途径，安全性非常重要 java提供了一个可配置的‘沙箱’，在沙箱中可以放置不可靠的Java程序，沙箱对不可靠的java程序进行了限制，比如java applet。之后，引入了数字签名和认证的信任模式
+基本沙箱 沙箱安全模型，最重要的优点之一就是这些组件中的类加载器和安全管理器是可以由用户定制的。
+类装载器体系结构 类加载器体系结构在三个方面对java沙箱起作用：
+ 它防止恶意代码去干涉善意的代码，通过由不同类装载器载入的类提供不用的命名空间来实现。 它守护了被信任的类库的边界 它将代码归入某类，该类确定了代码块恶意进行哪些操作  类加载器请求另一个类装载器来装载类的过程被形式化，称为双亲委派模式
+class文件检验器 保证class文件内容有正确的内部结构
+ class文件结构检查 类型数据的语义检查 字节码验证 符号引用的验证  java虚拟机中内置的安全特性 类型安全的引用转换 结构化的内存访问 自动垃圾收集 数组边界检查 空引用检查
+java虚拟机 java虚拟机的体系结构 数据类型 字长的考量 虚拟机的实现至少选择32位作为字长
+局部变量和操作数栈都是按照‘字’来定义的
+类装载器子系统  装载 链接  验证 确保被导入类型的正确性 准备 为类变量分配内存，并将其初始化为默认值 解析 把类型的符号引用转换为直接引用   初始化  当虚拟机装载某个类型时，它使用类装载器定位相应的class文件，然后读入这个class文件（一个线性二进制流），然后将它传输到虚拟机中，紧接着虚拟机提取其中的类型信息，并将这些信息存储到方法区。该类型中的静态变量同样也是存储在方法区中。</description>
+    </item>
+    
+    <item>
+      <title>设计模式之禅笔记</title>
+      <link>https://blog.rua.run/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%A6%85%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Wed, 12 Feb 2020 14:44:04 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%A6%85%E7%AC%94%E8%AE%B0/</guid>
+      <description>六大原则 单一职责 定义 SRP
+There should never be more than one reason for a class to change
+好处  类的复杂性降低，实现什么职责都有清晰明确的定义 可读性提高 可维护性提高 变更引起的风险降低  单一职责提出类一个编写程序的标准，用“职责”或“变化原因”来衡量接口或类设计得是否优良，但是“职责”或“变化原因都是不可衡量的，因项目而异，因环境而异
+最佳实践： 接口做到单一职责，类的设计尽量做到只有一个原因引起变化
+里式替换 定义 LSP
+ If for each object o1 of type S there is an object o2 of when o1 is substituted for o2 then S is a subtype of T (如果对每一个类型为S的对象o1，都有类型为T的对象o2，使得以T定义的所有程序P在所有的对象o1都代换成o2时，程序P的行为没有发生变化，那么类型S是类型T的子类型) Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it.</description>
+    </item>
+    
+    <item>
+      <title>spring-boot中处理异常的几种方式</title>
+      <link>https://blog.rua.run/posts/several-ways-to-handle-exceptions-in-spring-boot/</link>
+      <pubDate>Wed, 09 Oct 2019 10:43:46 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/posts/several-ways-to-handle-exceptions-in-spring-boot/</guid>
+      <description>使用@ControllerAdvice 和 @ExceptionHandler 处理异常 这种方式比较通用，也能对异常统一处理
+/** * */ @ControllerAdvice(assignableTypes = {ExceptionController.class}) @ResponseBody public class GlobalExceptionHandler { ErrorResponse illegalArgumentResponse = new ErrorResponse(new IllegalArgumentException(&amp;#34;参数错误!&amp;#34;)); ErrorResponse resourseNotFoundResponse = new ErrorResponse(new ResourceNotFoundException(&amp;#34;Sorry, the resourse not found!&amp;#34;)); @ExceptionHandler(value = Exception.class)// 拦截所有异常, 这里只是为了演示，一般情况下一个方法特定处理一种异常  public ResponseEntity&amp;lt;ErrorResponse&amp;gt; exceptionHandler(Exception e) { if (e instanceof IllegalArgumentException) { return ResponseEntity.status(400).body(illegalArgumentResponse); } else if (e instanceof ResourceNotFoundException) { return ResponseEntity.status(404).body(resourseNotFoundResponse); } return null; } } ResponseStatusException MyResourceNotFoundException.java
+@ResponseStatus(code = HttpStatus.NOT_FOUND) public class MyResourceNotFoundException extends RuntimeException { public MyResourceNotFoundException(){ } public MyResourceNotFoundException(String message){ super(message); } } Controller.</description>
+    </item>
+    
+    <item>
+      <title>java 多线程</title>
+      <link>https://blog.rua.run/posts/thread-wait-sleep/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.rua.run/posts/thread-wait-sleep/</guid>
+      <description>Java中的多线程是一种抢占式的机制，而不是分时机制。抢占式的机制是有多个线程处于可运行状态，但是只有一个线程在运行。
+共同点   他们都是在多线程的环境下，都可以在程序的调用处阻塞指定的毫秒数，并返回。
+  wait()和sleep()都可以通过interrupt()方法 打断线程的暂停状态 ，从而使线程立刻抛出InterruptedException。 如果线程A希望立即结束线程B，则可以对线程B对应的Thread实例调用interrupt方法。如果此刻线程B正在wait/sleep/join，则线程B会立刻抛出InterruptedException，在catch() {} 中直接return即可安全地结束线程。
+  需要注意的是，InterruptedException是线程自己从内部抛出的，并不是interrupt()方法抛出的。对某一线程调用 interrupt()时，如果该线程正在执行普通的代码，那么该线程根本就不会抛出InterruptedException。但是，一旦该线程进入到 wait()/sleep()/join()后，就会立刻抛出InterruptedException 。
+不同点  每个对象都有一个锁来控制同步访问。Synchronized关键字可以和对象的锁交互，来实现线程的同步。 sleep方法没有释放锁，而wait方法释放了锁，使得其他线程可以使用同步控制块或者方法。 wait，notify和notifyAll只能在同步控制方法或者同步控制块里面使用，而sleep可以在任何地方使用 sleep必须捕获异常，而wait，notify和notifyAll不需要捕获异常 sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或notifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。  </description>
+    </item>
+    
+    <item>
+      <title>java类初始化详解</title>
+      <link>https://blog.rua.run/posts/java-class-init/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.rua.run/posts/java-class-init/</guid>
+      <description>概述 类从被加载到虚拟机内存中开始，到卸载出内存为止，它的整个生命周期包括：加载（Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化（Initialization）、使用（Useing）、**卸载（Unloading）**7个阶段。其中验证、准备和解析3个部分统称为连接（Linking），这7个阶段的发生顺序如图所示。
+类的生命周期 加载、验证、准备、初始化和卸载这5个阶段的顺序是确定的，类的加载过程 必须按照这种顺序按部就班地开始，而解析阶段则不一定：它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定） 。
+对于初始化阶段，虚拟机规范则是严格规定了有且只有5种情况必须立即对类进行“初始化”（ 而加载、 验证、 准备自然需要在此之前开始）：
+遇到new、getstatic、putstatic或invokestatic这4条字节码指令时，如果类没有进行过初始化，则需要先触发其初始化。 使用java.lang.reflect包的方法对类进行反射调用的时候，如果类没有进行过初始化，则需要先触发其初始化。 当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。 当虚拟机启动时，用户需要指定一个要执行的主类（ 包含main()方法的那个类），虚拟机会先初始化这个主类。 当使用JDK 1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄， 并且这个方法句柄所对应的类没有进行过初始化， 则需要先触发其初始化。 这五种情况称为对一个类进行主动引用。其余情况都不会触发初始化，称为被动引用。
+  主动引用 首先准备两个类用户测试其是否初始化。
+  SuperClass
+package cn.lastwhisper.jvm.classloading.initiative;/*** @author lastwhisper*/public class SuperClass {public static int value = 123;static {System.out.println(&amp;#34;SuperClass static code init!&amp;#34;);}public SuperClass() {System.out.println(&amp;#34;SuperClass constructor init! &amp;#34;);}public static int getValue() {return value;}public static void setValue(int value) {SuperClass.</description>
+    </item>
+    
+    <item>
+      <title>Spring事务</title>
+      <link>https://blog.rua.run/posts/spring-transaction/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.rua.run/posts/spring-transaction/</guid>
+      <description>事务属性的种类： 传播行为、隔离级别、只读和事务超时
+  a) 传播行为定义了被调用方法的事务边界。
+   传播行为 意义     PROPERGATION_MANDATORY 表示方法必须运行在一个事务中，如果当前事务不存在，就抛出异常   PROPAGATION_NESTED 表示如果当前事务存在，则方法应该运行在一个嵌套事务中。否则，它看起来和 PROPAGATION_REQUIRED 看起来没什么两样   PROPAGATION_NEVER 表示方法不能运行在一个事务中，否则抛出异常   PROPAGATION_NOT_SUPPORTED 表示方法不能运行在一个事务中，如果当前存在一个事务，则该方法将被挂起   PROPAGATION_REQUIRED 表示当前方法必须运行在一个事务中，如果当前存在一个事务，那么该方法运行在这个事务中，否则，将创建一个新的事务   PROPAGATION_REQUIRES_NEW 表示当前方法必须运行在自己的事务中，如果当前存在一个事务，那么这个事务将在该方法运行期间被挂起   PROPAGATION_SUPPORTS 表示当前方法不需要运行在一个是事务中，但如果有一个事务已经存在，该方法也可以运行在这个事务中      b) 隔离级别
+在操作数据时可能带来 3 个副作用，分别是脏读、不可重复读、幻读。 为了避免这 3 中副作用的发生，在标准的 SQL 语句中定义了 4 种隔离级别，分别是未提交读、已提交读、可重复读、可序列化。 而在 spring 事务中提供了 5 种隔离级别来对应在 SQL 中定义的 4 种隔离级别，如下：
+   隔离级别 意义     ISOLATION_DEFAULT 使用后端数据库默认的隔离级别   ISOLATION_READ_UNCOMMITTED 允许读取未提交的数据（对应未提交读），可能导致脏读、不可重复读、幻读   ISOLATION_READ_COMMITTED 允许在一个事务中读取另一个已经提交的事务中的数据（对应已提交读）。可以避免脏读，但是无法避免不可重复读和幻读   ISOLATION_REPEATABLE_READ 一个事务不可能更新由另一个事务修改但尚未提交（回滚）的数据（对应可重复读）。可以避免脏读和不可重复读，但无法避免幻读   ISOLATION_SERIALIZABLE 这种隔离级别是所有的事务都在一个执行队列中，依次顺序执行，而不是并行（对应可序列化）。可以避免脏读、不可重复读、幻读。但是这种隔离级别效率很低，因此，除非必须，否则不建议使用。      c)只读</description>
+    </item>
+    
+  </channel>
+</rss>

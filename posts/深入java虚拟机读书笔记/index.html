@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  <link rel="prev" href="https://blog.rua.run/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%A6%85%E7%AC%94%E8%AE%B0/" />
+  <link rel="next" href="https://blog.rua.run/posts/mybatis/mybatis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+  <link rel="canonical" href="https://blog.rua.run/posts/%E6%B7%B1%E5%85%A5java%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           深入java虚拟机读书笔记 | Note
+       
+  </title>
+  <meta name="title" content="深入java虚拟机读书笔记 | Note">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.rua.run"
+    },
+    "articleSection" : "posts",
+    "name" : "深入java虚拟机读书笔记",
+    "headline" : "深入java虚拟机读书笔记",
+    "description" : "平台无关 为什么要平台无关 减少开发在多个平台部署应用的时间和成本\nJava的体系结构对平台无关的支持  java平台（虚拟机）扮演着程序与硬件和操作系统的缓冲角色，java程序被编译成可运行在虚拟机的二进制程序 Java语言基本类型是独立定义的，确保基本数据类型在所有平台上的一致性 javaclass文件，是特定java虚拟机的二进制文件，不同平台都可以装入和运行 可伸缩性，针对不同平台，最大资源不同，有不同标准库的子集或超集  影响平台无关性的因素  java平台的部署，所有设备上都需要拥有java平台的实现 java平台的版本，子集的运行环境不能支持需要超集运行环境的程序，虽然java平台尽可能保住向上兼容性，但是还是有些许不同，需要确定最小支持版本 本地方法，不要调用平台独立的直接或间接方法 非标准运行时库，java平台可能有多个厂商实现的版本，除了标准API的实现外可能还提供了平台独立的本地方法 对虚拟机的依赖，不要依赖finalization来达到程序正确性，不要依赖线程的优先级来达到程序的正确性（必须依赖同步来实现） 对用户界面的依赖，不同平台的实现不同，组件间的交互也不同 不同平台都需要测试，在程序运行的不同主机和不同java平台上测试是保证品台无关性的因素 平台无关的七个步骤  平台无关性的策略 最小公分母问题，所有java平台的开发商按照JavaApi标准，但允许性能和扩展领域存在差异，这就需要开发人员在平台无关和其它因素之间考虑\n安全 为什么需要安全 因为网络提供了一条攻击连入计算机的途径，安全性非常重要 java提供了一个可配置的‘沙箱’，在沙箱中可以放置不可靠的Java程序，沙箱对不可靠的java程序进行了限制，比如java applet。之后，引入了数字签名和认证的信任模式\n基本沙箱 沙箱安全模型，最重要的优点之一就是这些组件中的类加载器和安全管理器是可以由用户定制的。\n类装载器体系结构 类加载器体系结构在三个方面对java沙箱起作用：\n 它防止恶意代码去干涉善意的代码，通过由不同类装载器载入的类提供不用的命名空间来实现。 它守护了被信任的类库的边界 它将代码归入某类，该类确定了代码块恶意进行哪些操作  类加载器请求另一个类装载器来装载类的过程被形式化，称为双亲委派模式\nclass文件检验器 保证class文件内容有正确的内部结构\n class文件结构检查 类型数据的语义检查 字节码验证 符号引用的验证  java虚拟机中内置的安全特性 类型安全的引用转换 结构化的内存访问 自动垃圾收集 数组边界检查 空引用检查\njava虚拟机 java虚拟机的体系结构 数据类型 字长的考量 虚拟机的实现至少选择32位作为字长\n局部变量和操作数栈都是按照‘字’来定义的\n类装载器子系统  装载 链接  验证 确保被导入类型的正确性 准备 为类变量分配内存，并将其初始化为默认值 解析 把类型的符号引用转换为直接引用   初始化  当虚拟机装载某个类型时，它使用类装载器定位相应的class文件，然后读入这个class文件（一个线性二进制流），然后将它传输到虚拟机中，紧接着虚拟机提取其中的类型信息，并将这些信息存储到方法区。该类型中的静态变量同样也是存储在方法区中。",
+    "inLanguage" : "zh-CN",
+    "author" : "jiewen",
+    "creator" : "jiewen",
+    "publisher": "jiewen",
+    "accountablePerson" : "jiewen",
+    "copyrightHolder" : "jiewen",
+    "copyrightYear" : "2020",
+    "datePublished": "2020-02-18 19:28:17 \x2b0800 CST",
+    "dateModified" : "2020-02-18 19:28:17 \x2b0800 CST",
+    "url" : "https:\/\/blog.rua.run\/posts\/%E6%B7%B1%E5%85%A5java%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0\/",
+    "wordCount" : "368",
+    "keywords" : [  "Note"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <a class="menu-item" href="/about/" title=""></a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <a class="menu-item" href="/about/" title=""></a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">深入java虚拟机读书笔记</h1>
+        <div class="post-meta">
+            Written by <a itemprop="name" href="https://blog.rua.run"
+                rel="author">jiewen</a>
+            with ♥
+            <span class="post-time">
+                on <time datetime=2020-02-18
+                    itemprop="datePublished">2020-02-18</time>
+            </span>
+            in
+            
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+
+        
+        
+        
+
+        
+        
+        
+
+        <h1 id="平台无关">平台无关</h1>
+<h2 id="为什么要平台无关">为什么要平台无关</h2>
+<p>减少开发在多个平台部署应用的时间和成本</p>
+<h2 id="java的体系结构对平台无关的支持">Java的体系结构对平台无关的支持</h2>
+<ol>
+<li>java平台（虚拟机）扮演着程序与硬件和操作系统的缓冲角色，java程序被编译成可运行在虚拟机的二进制程序</li>
+<li>Java语言基本类型是独立定义的，确保基本数据类型在所有平台上的一致性</li>
+<li>javaclass文件，是特定java虚拟机的二进制文件，不同平台都可以装入和运行</li>
+<li>可伸缩性，针对不同平台，最大资源不同，有不同标准库的子集或超集</li>
+</ol>
+<h2 id="影响平台无关性的因素">影响平台无关性的因素</h2>
+<ol>
+<li>java平台的部署，所有设备上都需要拥有java平台的实现</li>
+<li>java平台的版本，子集的运行环境不能支持需要超集运行环境的程序，虽然java平台尽可能保住向上兼容性，但是还是有些许不同，需要确定最小支持版本</li>
+<li>本地方法，不要调用平台独立的直接或间接方法</li>
+<li>非标准运行时库，java平台可能有多个厂商实现的版本，除了标准API的实现外可能还提供了平台独立的本地方法</li>
+<li>对虚拟机的依赖，不要依赖finalization来达到程序正确性，不要依赖线程的优先级来达到程序的正确性（必须依赖同步来实现）</li>
+<li>对用户界面的依赖，不同平台的实现不同，组件间的交互也不同</li>
+<li>不同平台都需要测试，在程序运行的不同主机和不同java平台上测试是保证品台无关性的因素
+平台无关的七个步骤</li>
+</ol>
+<h2 id="平台无关性的策略">平台无关性的策略</h2>
+<p>最小公分母问题，所有java平台的开发商按照JavaApi标准，但允许性能和扩展领域存在差异，这就需要开发人员在平台无关和其它因素之间考虑</p>
+<h1 id="安全">安全</h1>
+<h2 id="为什么需要安全">为什么需要安全</h2>
+<p>因为网络提供了一条攻击连入计算机的途径，安全性非常重要
+java提供了一个可配置的‘沙箱’，在沙箱中可以放置不可靠的Java程序，沙箱对不可靠的java程序进行了限制，比如java applet。之后，引入了数字签名和认证的信任模式</p>
+<h2 id="基本沙箱">基本沙箱</h2>
+<p>沙箱安全模型，最重要的优点之一就是这些组件中的类加载器和安全管理器是可以由用户定制的。</p>
+<h2 id="类装载器体系结构">类装载器体系结构</h2>
+<p>类加载器体系结构在三个方面对java沙箱起作用：</p>
+<ol>
+<li>它防止恶意代码去干涉善意的代码，通过由不同类装载器载入的类提供不用的命名空间来实现。</li>
+<li>它守护了被信任的类库的边界</li>
+<li>它将代码归入某类，该类确定了代码块恶意进行哪些操作</li>
+</ol>
+<p>类加载器请求另一个类装载器来装载类的过程被形式化，称为双亲委派模式</p>
+<h2 id="class文件检验器">class文件检验器</h2>
+<p>保证class文件内容有正确的内部结构</p>
+<ol>
+<li>class文件结构检查</li>
+<li>类型数据的语义检查</li>
+<li>字节码验证</li>
+<li>符号引用的验证</li>
+</ol>
+<h2 id="java虚拟机中内置的安全特性">java虚拟机中内置的安全特性</h2>
+<p>类型安全的引用转换
+结构化的内存访问
+自动垃圾收集
+数组边界检查
+空引用检查</p>
+<h1 id="java虚拟机">java虚拟机</h1>
+<h2 id="java虚拟机的体系结构">java虚拟机的体系结构</h2>
+<h3 id="数据类型">数据类型</h3>
+<h3 id="字长的考量">字长的考量</h3>
+<p>虚拟机的实现至少选择32位作为字长</p>
+<p>局部变量和操作数栈都是按照‘字’来定义的</p>
+<h3 id="类装载器子系统">类装载器子系统</h3>
+<ul>
+<li>装载</li>
+<li>链接
+<ul>
+<li>验证 确保被导入类型的正确性</li>
+<li>准备 为类变量分配内存，并将其初始化为默认值</li>
+<li>解析 把类型的符号引用转换为直接引用</li>
+</ul>
+</li>
+<li>初始化</li>
+</ul>
+<p>当虚拟机装载某个类型时，它使用类装载器定位相应的class文件，然后读入这个class文件（一个线性二进制流），然后将它传输到虚拟机中，紧接着虚拟机提取其中的类型信息，并将这些信息存储到方法区。该类型中的静态变量同样也是存储在方法区中。</p>
+<h3 id="方法区">方法区</h3>
+<p>所有线程都共享方法区</p>
+<p>方法区也可以被垃圾收集</p>
+<p>对于每个装载的类型，虚拟机都会在方法区中存储以下类型信息：</p>
+<ul>
+<li>
+<p>这个类型的全限定名</p>
+</li>
+<li>
+<p>这个类型的直接超类的全限定名</p>
+</li>
+<li>
+<p>这个类型时类类型还是接口类型</p>
+</li>
+<li>
+<p>这个类型的访问修饰符</p>
+</li>
+<li>
+<p>任何直接超接口的全限定名的有序列表</p>
+</li>
+<li>
+<p>该类型的常量池</p>
+</li>
+<li>
+<p>字段信息</p>
+</li>
+<li>
+<p>方法信息</p>
+</li>
+<li>
+<p>除了常量以外的所有类（静态）变量</p>
+</li>
+<li>
+<p>一个到类ClassLoader的引用</p>
+</li>
+<li>
+<p>字段的访问修饰符</p>
+</li>
+<li>
+<p>字段的类型</p>
+</li>
+<li>
+<p>字段名</p>
+</li>
+<li>
+<p>方法的访问修饰符</p>
+</li>
+<li>
+<p>方法的返回值类型</p>
+</li>
+<li>
+<p>方法名</p>
+</li>
+<li>
+<p>方法参数列表</p>
+</li>
+<li>
+<p>方法的字节码（如果不是抽象类）</p>
+</li>
+<li>
+<p>异常表</p>
+</li>
+</ul>
+<h3 id="堆">堆</h3>
+<p>所有线程都共享堆</p>
+<p>对象中含有方法表，方法表是个指针数组，其中每一项都指向“实例方法数据的指针”，方法表所指向的方法可能是此类声明的，也可能是它继承下来的</p>
+<p>数组也是对象，所有具有相同纬度和类型的数组都是同一类的实例，而不管数组的长度是多少</p>
+<p>对象锁，是把锁数据放在一个以对象地址为索引的搜索树种</p>
+<p>线程等待（从 object 继承的 wait() notify()）同样可以放在以对象地址为索引的搜索树中</p>
+<p>对象引用计数 例如垃圾收集器使用标记清除算法，会附加一些数据到对象上</p>
+<h3 id="程序计数器">程序计数器</h3>
+<p>每个线程都有它自己的PC寄存器，PC寄存器的大小是一个字长，它既能够持有一个本地指针，也能够持有一个returnAddress，如果该线程正在执行一个本地方法，那么此时PC寄存器的值是‘undefined’</p>
+<h3 id="java栈">Java栈</h3>
+<p>Java栈上的所有数据都是线程私有的</p>
+<p>当一个线程启动时，java虚拟机都会为它分配一个java栈。java栈是以帧为单位保存线程的运行状态。虚拟机只会对java栈执行两种操作：以帧为单位的压栈或出栈</p>
+<p>线程正在执行的方法被称为当前方法，当前方法使用的帧称为当前帧，当前方法所属的类称为当前类，当前类的常量池称为当前常量池。</p>
+<h3 id="栈帧">栈帧</h3>
+<p>栈帧由三部分组成</p>
+<ul>
+<li>局部变量区 以字长为单位以0开始计数的数组，通过索引来操作，byte、char、short、boolean转换为int为一个字长，long和double为两个字长</li>
+<li>操作数栈 也是以字长为单位的数组，通过压栈出栈来操作，大小根据具体操作而定</li>
+<li>帧数据区 支持常量解析、正常方法返回、异常派发机制</li>
+</ul>
+<p>当虚拟机调用一个java方法时，它从对应类的类信息中得到此方法的局部变量区和操作数栈的大小，并据此来分配栈帧内存，然后压入java栈中。</p>
+<h3 id="本地方法栈">本地方法栈</h3>
+<p>当某个线程调用一个本地方法时，它就进入了一个全新的并且不再受虚拟机限制的世界。本地方法可以通过本地方法接口来访问虚拟机的运行时数据区</p>
+<p>本地方法栈大小不固定，可以根据需要动态扩展或者收缩</p>
+<h3 id="执行引擎">执行引擎</h3>
+<h1 id="java-class文件">Java class文件</h1>
+<h2 id="java-class文件是什么">java class文件是什么</h2>
+<p>java class 文件是对java程序二进制文件格式的精确定义</p>
+<h2 id="class文件的内容">class文件的内容</h2>
+<p>class 文件“基本类型”</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>u1</td>
+<td>1个字节，无符号类型</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>2个字节，无符号类型</td>
+</tr>
+<tr>
+<td>u4</td>
+<td>4个字节，无符号类型</td>
+</tr>
+<tr>
+<td>u8</td>
+<td>8个字节，无符号类型</td>
+</tr>
+</tbody>
+</table>
+<p>ClassFile表的格式：</p>
+<ul>
+<li>
+<p>magic</p>
+<p>文件前4个字节被称为魔数：0xCAFEBABE，用户分辨非java class文件</p>
+</li>
+<li>
+<p>minor_version 和 major_version</p>
+<p>下面4个字节包含了主次版本号</p>
+</li>
+<li>
+<p>constant_pool_count 和 constant_pool</p>
+<p>常量池数量 = 常量池实际数量 + 1</p>
+<p>常量池</p>
+</li>
+<li>
+<p>access_flags</p>
+<p>标识是接口还是类、修饰符、抽象的还是公共的、是否final</p>
+</li>
+<li>
+<p>this_class</p>
+<p>指向常量池的类索引</p>
+</li>
+<li>
+<p>super_class</p>
+<p>指向常量池超类全限定名的入口</p>
+</li>
+<li>
+<p>interface_count 和 interfaces</p>
+<p>该类直接实现的接口或间接扩展的父接口的数量和数组</p>
+</li>
+<li>
+<p>fields_count 和 fields</p>
+</li>
+</ul>
+<p>该类或接口中声明的字段的数量和字段的名字描述符和修饰符</p>
+<ul>
+<li>methods_count 和 methods</li>
+</ul>
+<p>分别包含方法数量和方法名、方法描述符和方法局部变量包含的局部变量的栈长度（用于之后实例化对象分配栈内存大小），还会包含方法已验证的异常列表</p>
+<ul>
+<li>attributes_count 和 attributes</li>
+</ul>
+<p>SourceCode和InnerClass都出现在attributes的列表中</p>
+<h2 id="特殊字符串">特殊字符串</h2>
+<ul>
+<li>
+<p>全限定名</p>
+<p>在class文件中类或接口名以全限定名出现在常量池中，全限定名的点用斜线替代</p>
+</li>
+<li>
+<p>简单名称</p>
+<p>字段名和方法名用简单名称形式出现在常量池中</p>
+</li>
+<li>
+<p>描述符</p>
+<p>指向字段和方法的符号引用还包含描述符字符串，字段的描述符给出了字段的类型，方法的描述符给出了方法的返回值和方法参数的数量、类型以及顺序</p>
+<p>字符和方法的描述符由如下所示的上下文无关语法定义，都是ASCII字符</p>
+<p>非终结符号用斜体字标出</p>
+<p>终结符号用等宽字体标出</p>
+<p>星号代表紧接着它前面的符号将会出现0次或多次</p>
+<ul>
+<li>
+<p>基本类型终结符 B C D F I J S Z</p>
+</li>
+<li>
+<p>返回值描述终结符 V</p>
+</li>
+<li>
+<p>对象类型终结符 L和;</p>
+</li>
+<li>
+<p>数组类型终结符 [</p>
+</li>
+<li>
+<p>方法描述终结符 ()</p>
+</li>
+</ul>
+<p>上下文无关的语法定义：</p>
+<pre><code>FieldDescriptor:
+    FieldType
+ComponentType:
+    FieldType
+FieldType:
+    BaseType
+    ObjectType
+    ArrayType
+BaseType:
+    B
+    C
+    D
+    F
+    I
+    J
+    S
+    Z
+ObjectType:
+    L&lt;classname&gt;;
+ArrayType:
+    [ComponentType
+MethodDescriptor:
+    (ParameterDescriptor* ) ReturnDescriptor
+ParameterDescriptor:
+    FiledType
+ReturnDescriptor:
+    FiledType
+    V
+
+</code></pre><p>例如：</p>
+<pre><code>([Ljava/lang/String;)V  -&gt; void main(String[] args);
+(ZILjava/lang/String;II) Z -&gt; boolean regionMatches(boolean ignoreCase, int otOffset, String other, int ooffeset, int len);
+
+</code></pre><h2 id="常量池">常量池</h2>
+<p>常量池是一个可变长度的cp_info 表的有序序列</p>
+<p>有以下几种类型：</p>
+<p>CONSTANT_Utf8_Info
+CONSTANT_Integer_Info
+CONSTANT_Float_Info
+CONSTANT_Long_Info
+CONSTANT_Double_Info
+CONSTANT_Class_Info
+CONSTANT_String_Info
+CONSTANT_Fieldref_Info
+CONSTANT_Methodref_Info
+CONSTANT_InterfaceMethodref_Info
+CONSTANT_NameAndType_Info</p>
+<h2 id="字段和方法">字段和方法</h2>
+<p>由field_info或method_info可变长度表进行描述</p>
+<p>包含</p>
+<ul>
+<li>
+<p>access_flags</p>
+<p>修饰符</p>
+</li>
+<li>
+<p>name_index</p>
+<p>CONSTANT_Utf8_Info 的索引</p>
+</li>
+<li>
+<p>descriptor_index</p>
+<p>CONSTANT_Utf8_Info 的索引</p>
+</li>
+<li>
+<p>attributes_count</p>
+<p>attributes的数量</p>
+</li>
+<li>
+<p>attributes</p>
+<p>CONSTANT_Attribute_Info</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="属性">属性</h2>
+<p>由attributes_info可变长度表进行描述</p>
+<ul>
+<li>
+<p>attribute_name_index</p>
+<p>CONSTANT_Utf8_info常量池的索引</p>
+</li>
+<li>
+<p>attribute_length</p>
+<p>attribute的数量</p>
+</li>
+<li>
+<p>info</p>
+<p>包含属性数据</p>
+<ul>
+<li>CodeAttribute</li>
+<li>ConstantValue</li>
+<li>Deprecated</li>
+<li>Exceptions</li>
+<li>InnerClasses</li>
+<li>LineNumberTable</li>
+<li>LocalVariableTable</li>
+<li>SourceFile</li>
+<li>Synthetic</li>
+</ul>
+</li>
+</ul>
+<h1 id="类型的生命周期">类型的生命周期</h1>
+<h2 id="类型的装载连接初始化">类型的装载、连接、初始化</h2>
+<ul>
+<li>
+<p>装载</p>
+<p>把二进制形式的java类型读入Java虚拟机中</p>
+<p>把一个类型的二进制数据解析为方法区中的内部数据接口、并在堆上建立一个Class对象的过程，被称为“创建”类型</p>
+<p>类装载器并不一定需要一直等到某个类型首次使用时再区装入它，允许虚拟机缓存java类型的二进制，如果装载遇到问题，它会在类型被首次使用时抛出LinkageError异常</p>
+</li>
+<li>
+<p>连接</p>
+<ul>
+<li>
+<p>验证</p>
+<p>验证确保java类型数据格式正确并且适用于java虚拟机使用</p>
+<ul>
+<li>检查二进制数据格式（比如：魔数）</li>
+<li>确保每个类都有一个超类（除了Object）</li>
+<li>通过保存在常量池中的符号引用查找被引用的类、接口、字段、方法，确定其存在和访问权限</li>
+<li>检查所有常量池入口相互之间一致</li>
+<li>检查常量池中的所有特殊字符串是否符合格式</li>
+<li>检查字节码完整性</li>
+</ul>
+</li>
+<li>
+<p>准备</p>
+<p>负责为该类型分配所需内存</p>
+<p>在准备阶段，虚拟机把类变量新分配的内存根据类型设置为默认值。</p>
+<ul>
+<li>int 0</li>
+<li>long 0L</li>
+<li>short （short）0</li>
+<li>char &lsquo;\u0000&rsquo;</li>
+<li>byte (byte)0</li>
+<li>boolean false</li>
+<li>reference null</li>
+<li>float 0.0f</li>
+<li>double 0.0d</li>
+</ul>
+</li>
+<li>
+<p>解析</p>
+<p>负责把常量池中的符号引用转换为直接引用</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>-初始化</p>
+<p>将给类变量赋以适当的初始值</p>
+<p><strong>必须在每个类或接口首次主动使用时初始化</strong></p>
+<p>以下六种情形符合主动使用的要求：（面试题）</p>
+<ul>
+<li>当创建某个类额新实例时</li>
+<li>当调用某个类的静态方法时</li>
+<li>当使用某个类或接口的静态字段，或对该字段赋值时</li>
+<li>当调用JavaAPI中的反射方法时</li>
+<li>当初始化某个类的子类时（只有在某个接口所声明的非常量字段被使用时，接口才会被初始化）</li>
+<li>当虚拟机启动时某个被表明为启动类的类</li>
+</ul>
+<p>初始化一个类包含两个步骤</p>
+<ol>
+<li>如果类存在直接超类的话，且直接超类还没有被初始化，就先初始化直接超类</li>
+<li>如果类就一个类初始化方法，就执行此方法</li>
+</ol>
+<p>如果多个线程同时需要初始化一个类，仅仅允许一个线程来执行初始化，其他的线程需要等待，之后会通知其他等待线程。</p>
+<p>注意： 类初始化，类变量初始化语句和静态初始化语句按照先后顺序执行</p>
+<ol>
+<li><!-- raw HTML omitted -->() 方法
+Java编译器把类变量初始化语句和静态初始化语句的代码都放在class文件的<!-- raw HTML omitted -->()方法中，顺序安卓他们在类或者接口声明中出现的顺序
+常量是被java编译器特殊处理的，直接在字节码流中嵌入值</li>
+<li>被动使用与主动使用
+使用一个非常量的静态字段，当只有字段的类是被类或者接口声明的时候才是主动使用。</li>
+</ol>
+<h2 id="对象的生命周期">对象的生命周期</h2>
+<h3 id="类实例化">类实例化</h3>
+<ul>
+<li>new</li>
+<li>clone()</li>
+<li>Class或者java.lang.reflect.Constructor对象的 newInstance()方法</li>
+<li>反序列化</li>
+</ul>
+<h3 id="垃圾收集和对象的终结">垃圾收集和对象的终结</h3>
+<p>垃圾收集器自动调用的finalize方法抛出的任何异常都将被忽略。垃圾收集器可以用任意顺序调用finalize方法，使用任何线程，甚至并行使用多线程</p>
+<h3 id="卸载类型">卸载类型</h3>
+
+    </div>
+
+    <div class="post-copyright">
+        
+
+        
+        <p class="copyright-item">
+            <span>Link:</span>
+            <a href=https://blog.rua.run/posts/%E6%B7%B1%E5%85%A5java%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/>https://blog.rua.run/posts/%E6%B7%B1%E5%85%A5java%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</span>
+        </p>
+        
+        
+    </div>
+
+
+    <div class="post-tags">
+        
+        <section>
+            <a href="javascript:window.history.back();">back</a></span> ·
+            <span><a href="https://blog.rua.run">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://blog.rua.run/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%A6%85%E7%AC%94%E8%AE%B0/" class="prev" rel="prev" title="设计模式之禅笔记"><i
+                class="iconfont icon-left"></i>&nbsp;设计模式之禅笔记</a>
+        
+        
+        <a href="https://blog.rua.run/posts/mybatis/mybatis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="next" rel="next"
+            title="mybatis学习笔记">mybatis学习笔记&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+        
+        
+    </div>
+    
+<div class="post-toc">
+    <aside class="post-toc-aside">
+        
+        <nav id="TableOfContents">
+  <ol>
+    <li><a href="#为什么要平台无关">为什么要平台无关</a></li>
+    <li><a href="#java的体系结构对平台无关的支持">Java的体系结构对平台无关的支持</a></li>
+    <li><a href="#影响平台无关性的因素">影响平台无关性的因素</a></li>
+    <li><a href="#平台无关性的策略">平台无关性的策略</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#为什么需要安全">为什么需要安全</a></li>
+    <li><a href="#基本沙箱">基本沙箱</a></li>
+    <li><a href="#类装载器体系结构">类装载器体系结构</a></li>
+    <li><a href="#class文件检验器">class文件检验器</a></li>
+    <li><a href="#java虚拟机中内置的安全特性">java虚拟机中内置的安全特性</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#java虚拟机的体系结构">java虚拟机的体系结构</a>
+      <ol>
+        <li><a href="#数据类型">数据类型</a></li>
+        <li><a href="#字长的考量">字长的考量</a></li>
+        <li><a href="#类装载器子系统">类装载器子系统</a></li>
+        <li><a href="#方法区">方法区</a></li>
+        <li><a href="#堆">堆</a></li>
+        <li><a href="#程序计数器">程序计数器</a></li>
+        <li><a href="#java栈">Java栈</a></li>
+        <li><a href="#栈帧">栈帧</a></li>
+        <li><a href="#本地方法栈">本地方法栈</a></li>
+        <li><a href="#执行引擎">执行引擎</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li><a href="#java-class文件是什么">java class文件是什么</a></li>
+    <li><a href="#class文件的内容">class文件的内容</a></li>
+    <li><a href="#特殊字符串">特殊字符串</a></li>
+    <li><a href="#常量池">常量池</a></li>
+    <li><a href="#字段和方法">字段和方法</a></li>
+    <li><a href="#属性">属性</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#类型的装载连接初始化">类型的装载、连接、初始化</a></li>
+    <li><a href="#对象的生命周期">对象的生命周期</a>
+      <ol>
+        <li><a href="#类实例化">类实例化</a></li>
+        <li><a href="#垃圾收集和对象的终结">垃圾收集和对象的终结</a></li>
+        <li><a href="#卸载类型">卸载类型</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+    </aside>
+</div>
+
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  <link rel="prev" href="https://blog.rua.run/posts/several-ways-to-handle-exceptions-in-spring-boot/" />
+  <link rel="next" href="https://blog.rua.run/posts/%E6%B7%B1%E5%85%A5java%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" />
+  <link rel="canonical" href="https://blog.rua.run/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%A6%85%E7%AC%94%E8%AE%B0/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           设计模式之禅笔记 | Note
+       
+  </title>
+  <meta name="title" content="设计模式之禅笔记 | Note">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.rua.run"
+    },
+    "articleSection" : "posts",
+    "name" : "设计模式之禅笔记",
+    "headline" : "设计模式之禅笔记",
+    "description" : "六大原则 单一职责 定义 SRP\nThere should never be more than one reason for a class to change\n好处  类的复杂性降低，实现什么职责都有清晰明确的定义 可读性提高 可维护性提高 变更引起的风险降低  单一职责提出类一个编写程序的标准，用“职责”或“变化原因”来衡量接口或类设计得是否优良，但是“职责”或“变化原因都是不可衡量的，因项目而异，因环境而异\n最佳实践： 接口做到单一职责，类的设计尽量做到只有一个原因引起变化\n里式替换 定义 LSP\n If for each object o1 of type S there is an object o2 of when o1 is substituted for o2 then S is a subtype of T (如果对每一个类型为S的对象o1，都有类型为T的对象o2，使得以T定义的所有程序P在所有的对象o1都代换成o2时，程序P的行为没有发生变化，那么类型S是类型T的子类型) Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it.",
+    "inLanguage" : "zh-CN",
+    "author" : "jiewen",
+    "creator" : "jiewen",
+    "publisher": "jiewen",
+    "accountablePerson" : "jiewen",
+    "copyrightHolder" : "jiewen",
+    "copyrightYear" : "2020",
+    "datePublished": "2020-02-12 14:44:04 \x2b0800 CST",
+    "dateModified" : "2020-02-12 14:44:04 \x2b0800 CST",
+    "url" : "https:\/\/blog.rua.run\/posts\/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%A6%85%E7%AC%94%E8%AE%B0\/",
+    "wordCount" : "224",
+    "keywords" : [  "Note"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <a class="menu-item" href="/about/" title=""></a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <a class="menu-item" href="/about/" title=""></a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">设计模式之禅笔记</h1>
+        <div class="post-meta">
+            Written by <a itemprop="name" href="https://blog.rua.run"
+                rel="author">jiewen</a>
+            with ♥
+            <span class="post-time">
+                on <time datetime=2020-02-12
+                    itemprop="datePublished">2020-02-12</time>
+            </span>
+            in
+            
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+
+        
+        
+        
+
+        
+        
+        
+
+        <h1 id="六大原则">六大原则</h1>
+<h2 id="单一职责">单一职责</h2>
+<h3 id="定义">定义</h3>
+<p>SRP</p>
+<p>There should never be more than one reason for a class to change</p>
+<h3 id="好处">好处</h3>
+<ul>
+<li>类的复杂性降低，实现什么职责都有清晰明确的定义</li>
+<li>可读性提高</li>
+<li>可维护性提高</li>
+<li>变更引起的风险降低</li>
+</ul>
+<p><em>单一职责提出类一个编写程序的标准，用“职责”或“变化原因”来衡量接口或类设计得是否优良，但是“职责”或“变化原因都是不可衡量的，因项目而异，因环境而异</em></p>
+<h3 id="最佳实践">最佳实践：</h3>
+<p>接口做到单一职责，类的设计尽量做到只有一个原因引起变化</p>
+<h2 id="里式替换">里式替换</h2>
+<h3 id="定义-1">定义</h3>
+<p>LSP</p>
+<ul>
+<li>If for each object o1 of type S there is an object o2 of when o1 is substituted for o2 then S is a subtype of T
+(如果对每一个类型为S的对象o1，都有类型为T的对象o2，使得以T定义的所有程序P在所有的对象o1都代换成o2时，程序P的行为没有发生变化，那么类型S是类型T的子类型)</li>
+<li>Functions that use pointers or references to base classes must be able to use objects of  derived classes without knowing it.
+(所有引用基类的地方必须能透明地使用其他子类的对象)</li>
+</ul>
+<p>含义：</p>
+<ul>
+<li>
+<p><em>子类必须完全实现父类的方法</em></p>
+<pre><code>  如果子类不能完整地实现父类的方法，或者父类的某些方法在子类中已经发生畸变，则建议断开父子继承关系，采用依赖、组合、聚合等关系替代继承
+</code></pre>
+</li>
+<li>
+<p><em>子类可以有自己的个性</em></p>
+</li>
+<li>
+<p><em>覆盖或实现父类的方法时输入参数可以被放大</em></p>
+</li>
+<li>
+<p><em>覆盖或实现父类的方法时输出结果可以被缩小</em></p>
+</li>
+</ul>
+<p><em>在类中调用其他类时务必使用父类或接口，如果不能使用父类或接口，则说明类的设计已经违背类LSP原则</em></p>
+<h3 id="最佳实践-1">最佳实践</h3>
+<p>尽量避免子类的“个性”</p>
+<h2 id="依赖倒置">依赖倒置</h2>
+<h3 id="定义-2">定义</h3>
+<p>DIP Dependence Inversion Principle</p>
+<p>High level modules should not depend upon low level modules.Both should depend upon abstractions. Abstractions should not depend upon details. Details should depend upon abstractions.</p>
+<ul>
+<li>高层模块不应该依赖底层模块，两者都应该依赖其抽象</li>
+<li>抽象不应该依赖细节</li>
+<li>细节应该依赖抽象</li>
+</ul>
+<h3 id="依赖的三种写法">依赖的三种写法</h3>
+<ul>
+<li>构造函数传递</li>
+<li>Setter方法传递</li>
+<li>接口传递</li>
+</ul>
+<h3 id="最佳实践-2">最佳实践</h3>
+<ul>
+<li>尽量每个类都有接口或抽象类</li>
+<li>尽量不要覆写基类的方法</li>
+<li>结合里氏替换原则</li>
+<li>不应该从具体类派生</li>
+</ul>
+<p>核心：面向接口编程</p>
+<h2 id="接口隔离">接口隔离</h2>
+<h3 id="定义-3">定义</h3>
+<p>Clients should not be forced to depend upon interfaces that they don&rsquo;t use.
+客户端不应该依赖它不需要的接口</p>
+<p>The Dependency of one class to another one should depend on the smallest possible interface.
+类间的依赖关系应该建立在最小的接口上</p>
+<h3 id="四层含义">四层含义</h3>
+<ul>
+<li>接口要尽量小</li>
+<li>接口要高内聚</li>
+<li>定制服务（根据需求单独定制服务可以减少风险）</li>
+<li>接口设计是有限度的</li>
+</ul>
+<h3 id="最佳实践-3">最佳实践</h3>
+<p>接口和类应该尽量使用原子接口或原子类来组装，但是，原子该怎么划分是一个问题；以下是几个规则：</p>
+<ul>
+<li>一个接口只服务一个子模块或业务逻辑</li>
+<li>压缩接口中的public方法</li>
+<li>已经污染的接口尽量去修改</li>
+<li>根据业务来制定接口</li>
+</ul>
+<h2 id="迪米特法则">迪米特法则</h2>
+<h3 id="定义-4">定义</h3>
+<p>迪米特法则（Low of Demeter）又称为最少知识原则（Least Knowledge Principle)</p>
+<p>一个对象应该对另一个对象有最少的了解</p>
+<h3 id="只和直接的朋友通信">只和直接的朋友通信</h3>
+<p>迪米特法则还有一个英文解释是：talk only to your immediate friends（只和直接的朋友交流）。什么是朋友呢？每个对象都必然会与其他的对象有耦合关系，两个对象之间的耦合就会成为朋友关系。那么什么又是直接的朋友呢？出现在成员变量、方法的输入输出参数中的类就是直接的朋友。迪米特法则要求只和直接的朋友通信。</p>
+<p>注意：
+只出现在方法体内部的类就不是直接的朋友，如果一个类和不是直接的朋友进行交流，就属于违反迪米特法则。</p>
+<h3 id="最佳实践-4">最佳实践</h3>
+<p>迪米特法则的核心就是类间解耦，弱耦合</p>
+<ol>
+<li>
+<p>只和直接的朋友交流；</p>
+</li>
+<li>
+<p>减少对朋友的了解。</p>
+</li>
+</ol>
+<h2 id="开闭原则">开闭原则</h2>
+<h3 id="定义-5">定义</h3>
+<p>Software entities like classes, modules and functions should be open for extension but closed for modifications.
+(一个软件实体如类、模块和函数应该对扩展开放，对修改关闭)</p>
+<h1 id="23种设计模式">23种设计模式</h1>
+<h1 id="设计模式pk">设计模式PK</h1>
+<h2 id="创建类模式pk">创建类模式PK</h2>
+<p>工厂方法模式和建造者模式</p>
+<p>工厂方法模式注重的是整体对象的创建方法
+建造者模式注重的是部件构造的过程，一步一步精确的构造出一个复杂的对象</p>
+<p>抽象工厂模式和建造者模式</p>
+<h2 id="结构类模式pk">结构类模式pk</h2>
+<h1 id="设计模式混编">设计模式混编</h1>
+<h1 id="扩展">扩展</h1>
+
+    </div>
+
+    <div class="post-copyright">
+        
+
+        
+        <p class="copyright-item">
+            <span>Link:</span>
+            <a href=https://blog.rua.run/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%A6%85%E7%AC%94%E8%AE%B0/>https://blog.rua.run/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E7%A6%85%E7%AC%94%E8%AE%B0/</span>
+        </p>
+        
+        
+    </div>
+
+
+    <div class="post-tags">
+        
+        <section>
+            <a href="javascript:window.history.back();">back</a></span> ·
+            <span><a href="https://blog.rua.run">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://blog.rua.run/posts/several-ways-to-handle-exceptions-in-spring-boot/" class="prev" rel="prev" title="spring-boot中处理异常的几种方式"><i
+                class="iconfont icon-left"></i>&nbsp;spring-boot中处理异常的几种方式</a>
+        
+        
+        <a href="https://blog.rua.run/posts/%E6%B7%B1%E5%85%A5java%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="next" rel="next"
+            title="深入java虚拟机读书笔记">深入java虚拟机读书笔记&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+        
+        
+    </div>
+    
+<div class="post-toc">
+    <aside class="post-toc-aside">
+        
+        <nav id="TableOfContents">
+  <ol>
+    <li><a href="#单一职责">单一职责</a>
+      <ol>
+        <li><a href="#定义">定义</a></li>
+        <li><a href="#好处">好处</a></li>
+        <li><a href="#最佳实践">最佳实践：</a></li>
+      </ol>
+    </li>
+    <li><a href="#里式替换">里式替换</a>
+      <ol>
+        <li><a href="#定义-1">定义</a></li>
+        <li><a href="#最佳实践-1">最佳实践</a></li>
+      </ol>
+    </li>
+    <li><a href="#依赖倒置">依赖倒置</a>
+      <ol>
+        <li><a href="#定义-2">定义</a></li>
+        <li><a href="#依赖的三种写法">依赖的三种写法</a></li>
+        <li><a href="#最佳实践-2">最佳实践</a></li>
+      </ol>
+    </li>
+    <li><a href="#接口隔离">接口隔离</a>
+      <ol>
+        <li><a href="#定义-3">定义</a></li>
+        <li><a href="#四层含义">四层含义</a></li>
+        <li><a href="#最佳实践-3">最佳实践</a></li>
+      </ol>
+    </li>
+    <li><a href="#迪米特法则">迪米特法则</a>
+      <ol>
+        <li><a href="#定义-4">定义</a></li>
+        <li><a href="#只和直接的朋友通信">只和直接的朋友通信</a></li>
+        <li><a href="#最佳实践-4">最佳实践</a></li>
+      </ol>
+    </li>
+    <li><a href="#开闭原则">开闭原则</a>
+      <ol>
+        <li><a href="#定义-5">定义</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li><a href="#创建类模式pk">创建类模式PK</a></li>
+    <li><a href="#结构类模式pk">结构类模式pk</a></li>
+  </ol>
+</nav>
+    </aside>
+</div>
+
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

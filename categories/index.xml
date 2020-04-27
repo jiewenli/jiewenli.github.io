@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on Note</title>
+    <link>https://blog.rua.run/categories/</link>
+    <description>Recent content in Categories on Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 09 Oct 2019 10:43:46 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rua.run/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>java</title>
+      <link>https://blog.rua.run/categories/java/</link>
+      <pubDate>Wed, 09 Oct 2019 10:43:46 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/categories/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring-boot</title>
+      <link>https://blog.rua.run/categories/spring-boot/</link>
+      <pubDate>Wed, 09 Oct 2019 10:43:46 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/categories/spring-boot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring</title>
+      <link>https://blog.rua.run/categories/spring/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.rua.run/categories/spring/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

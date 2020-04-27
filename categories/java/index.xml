@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>java on Note</title>
+    <link>https://blog.rua.run/categories/java/</link>
+    <description>Recent content in java on Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 09 Oct 2019 10:43:46 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rua.run/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>spring-boot中处理异常的几种方式</title>
+      <link>https://blog.rua.run/posts/several-ways-to-handle-exceptions-in-spring-boot/</link>
+      <pubDate>Wed, 09 Oct 2019 10:43:46 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/posts/several-ways-to-handle-exceptions-in-spring-boot/</guid>
+      <description>使用@ControllerAdvice 和 @ExceptionHandler 处理异常 这种方式比较通用，也能对异常统一处理
+/** * */ @ControllerAdvice(assignableTypes = {ExceptionController.class}) @ResponseBody public class GlobalExceptionHandler { ErrorResponse illegalArgumentResponse = new ErrorResponse(new IllegalArgumentException(&amp;#34;参数错误!&amp;#34;)); ErrorResponse resourseNotFoundResponse = new ErrorResponse(new ResourceNotFoundException(&amp;#34;Sorry, the resourse not found!&amp;#34;)); @ExceptionHandler(value = Exception.class)// 拦截所有异常, 这里只是为了演示，一般情况下一个方法特定处理一种异常  public ResponseEntity&amp;lt;ErrorResponse&amp;gt; exceptionHandler(Exception e) { if (e instanceof IllegalArgumentException) { return ResponseEntity.status(400).body(illegalArgumentResponse); } else if (e instanceof ResourceNotFoundException) { return ResponseEntity.status(404).body(resourseNotFoundResponse); } return null; } } ResponseStatusException MyResourceNotFoundException.java
+@ResponseStatus(code = HttpStatus.NOT_FOUND) public class MyResourceNotFoundException extends RuntimeException { public MyResourceNotFoundException(){ } public MyResourceNotFoundException(String message){ super(message); } } Controller.</description>
+    </item>
+    
+    <item>
+      <title>java 多线程</title>
+      <link>https://blog.rua.run/posts/thread-wait-sleep/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.rua.run/posts/thread-wait-sleep/</guid>
+      <description>Java中的多线程是一种抢占式的机制，而不是分时机制。抢占式的机制是有多个线程处于可运行状态，但是只有一个线程在运行。
+共同点   他们都是在多线程的环境下，都可以在程序的调用处阻塞指定的毫秒数，并返回。
+  wait()和sleep()都可以通过interrupt()方法 打断线程的暂停状态 ，从而使线程立刻抛出InterruptedException。 如果线程A希望立即结束线程B，则可以对线程B对应的Thread实例调用interrupt方法。如果此刻线程B正在wait/sleep/join，则线程B会立刻抛出InterruptedException，在catch() {} 中直接return即可安全地结束线程。
+  需要注意的是，InterruptedException是线程自己从内部抛出的，并不是interrupt()方法抛出的。对某一线程调用 interrupt()时，如果该线程正在执行普通的代码，那么该线程根本就不会抛出InterruptedException。但是，一旦该线程进入到 wait()/sleep()/join()后，就会立刻抛出InterruptedException 。
+不同点  每个对象都有一个锁来控制同步访问。Synchronized关键字可以和对象的锁交互，来实现线程的同步。 sleep方法没有释放锁，而wait方法释放了锁，使得其他线程可以使用同步控制块或者方法。 wait，notify和notifyAll只能在同步控制方法或者同步控制块里面使用，而sleep可以在任何地方使用 sleep必须捕获异常，而wait，notify和notifyAll不需要捕获异常 sleep是线程类（Thread）的方法，导致此线程暂停执行指定时间，给执行机会给其他线程，但是监控状态依然保持，到时后会自动恢复。调用sleep不会释放对象锁。 wait是Object类的方法，对此对象调用wait方法导致本线程放弃对象锁，进入等待此对象的等待锁定池，只有针对此对象发出notify方法（或notifyAll）后本线程才进入对象锁定池准备获得对象锁进入运行状态。  </description>
+    </item>
+    
+    <item>
+      <title>java类初始化详解</title>
+      <link>https://blog.rua.run/posts/java-class-init/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.rua.run/posts/java-class-init/</guid>
+      <description>概述 类从被加载到虚拟机内存中开始，到卸载出内存为止，它的整个生命周期包括：加载（Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化（Initialization）、使用（Useing）、**卸载（Unloading）**7个阶段。其中验证、准备和解析3个部分统称为连接（Linking），这7个阶段的发生顺序如图所示。
+类的生命周期 加载、验证、准备、初始化和卸载这5个阶段的顺序是确定的，类的加载过程 必须按照这种顺序按部就班地开始，而解析阶段则不一定：它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定） 。
+对于初始化阶段，虚拟机规范则是严格规定了有且只有5种情况必须立即对类进行“初始化”（ 而加载、 验证、 准备自然需要在此之前开始）：
+遇到new、getstatic、putstatic或invokestatic这4条字节码指令时，如果类没有进行过初始化，则需要先触发其初始化。 使用java.lang.reflect包的方法对类进行反射调用的时候，如果类没有进行过初始化，则需要先触发其初始化。 当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。 当虚拟机启动时，用户需要指定一个要执行的主类（ 包含main()方法的那个类），虚拟机会先初始化这个主类。 当使用JDK 1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄， 并且这个方法句柄所对应的类没有进行过初始化， 则需要先触发其初始化。 这五种情况称为对一个类进行主动引用。其余情况都不会触发初始化，称为被动引用。
+  主动引用 首先准备两个类用户测试其是否初始化。
+  SuperClass
+package cn.lastwhisper.jvm.classloading.initiative;/*** @author lastwhisper*/public class SuperClass {public static int value = 123;static {System.out.println(&amp;#34;SuperClass static code init!&amp;#34;);}public SuperClass() {System.out.println(&amp;#34;SuperClass constructor init! &amp;#34;);}public static int getValue() {return value;}public static void setValue(int value) {SuperClass.</description>
+    </item>
+    
+    <item>
+      <title>Spring事务</title>
+      <link>https://blog.rua.run/posts/spring-transaction/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.rua.run/posts/spring-transaction/</guid>
+      <description>事务属性的种类： 传播行为、隔离级别、只读和事务超时
+  a) 传播行为定义了被调用方法的事务边界。
+   传播行为 意义     PROPERGATION_MANDATORY 表示方法必须运行在一个事务中，如果当前事务不存在，就抛出异常   PROPAGATION_NESTED 表示如果当前事务存在，则方法应该运行在一个嵌套事务中。否则，它看起来和 PROPAGATION_REQUIRED 看起来没什么两样   PROPAGATION_NEVER 表示方法不能运行在一个事务中，否则抛出异常   PROPAGATION_NOT_SUPPORTED 表示方法不能运行在一个事务中，如果当前存在一个事务，则该方法将被挂起   PROPAGATION_REQUIRED 表示当前方法必须运行在一个事务中，如果当前存在一个事务，那么该方法运行在这个事务中，否则，将创建一个新的事务   PROPAGATION_REQUIRES_NEW 表示当前方法必须运行在自己的事务中，如果当前存在一个事务，那么这个事务将在该方法运行期间被挂起   PROPAGATION_SUPPORTS 表示当前方法不需要运行在一个是事务中，但如果有一个事务已经存在，该方法也可以运行在这个事务中      b) 隔离级别
+在操作数据时可能带来 3 个副作用，分别是脏读、不可重复读、幻读。 为了避免这 3 中副作用的发生，在标准的 SQL 语句中定义了 4 种隔离级别，分别是未提交读、已提交读、可重复读、可序列化。 而在 spring 事务中提供了 5 种隔离级别来对应在 SQL 中定义的 4 种隔离级别，如下：
+   隔离级别 意义     ISOLATION_DEFAULT 使用后端数据库默认的隔离级别   ISOLATION_READ_UNCOMMITTED 允许读取未提交的数据（对应未提交读），可能导致脏读、不可重复读、幻读   ISOLATION_READ_COMMITTED 允许在一个事务中读取另一个已经提交的事务中的数据（对应已提交读）。可以避免脏读，但是无法避免不可重复读和幻读   ISOLATION_REPEATABLE_READ 一个事务不可能更新由另一个事务修改但尚未提交（回滚）的数据（对应可重复读）。可以避免脏读和不可重复读，但无法避免幻读   ISOLATION_SERIALIZABLE 这种隔离级别是所有的事务都在一个执行队列中，依次顺序执行，而不是并行（对应可序列化）。可以避免脏读、不可重复读、幻读。但是这种隔离级别效率很低，因此，除非必须，否则不建议使用。      c)只读</description>
+    </item>
+    
+  </channel>
+</rss>

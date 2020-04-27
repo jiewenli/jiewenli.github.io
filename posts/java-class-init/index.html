@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  <link rel="prev" href="https://blog.rua.run/posts/spring-transaction/" />
+  <link rel="next" href="https://blog.rua.run/posts/thread-wait-sleep/" />
+  <link rel="canonical" href="https://blog.rua.run/posts/java-class-init/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           java类初始化详解 | Note
+       
+  </title>
+  <meta name="title" content="java类初始化详解 | Note">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.rua.run"
+    },
+    "articleSection" : "posts",
+    "name" : "java类初始化详解",
+    "headline" : "java类初始化详解",
+    "description" : "概述 类从被加载到虚拟机内存中开始，到卸载出内存为止，它的整个生命周期包括：加载（Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化（Initialization）、使用（Useing）、**卸载（Unloading）**7个阶段。其中验证、准备和解析3个部分统称为连接（Linking），这7个阶段的发生顺序如图所示。\n类的生命周期 加载、验证、准备、初始化和卸载这5个阶段的顺序是确定的，类的加载过程 必须按照这种顺序按部就班地开始，而解析阶段则不一定：它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定） 。\n对于初始化阶段，虚拟机规范则是严格规定了有且只有5种情况必须立即对类进行“初始化”（ 而加载、 验证、 准备自然需要在此之前开始）：\n遇到new、getstatic、putstatic或invokestatic这4条字节码指令时，如果类没有进行过初始化，则需要先触发其初始化。 使用java.lang.reflect包的方法对类进行反射调用的时候，如果类没有进行过初始化，则需要先触发其初始化。 当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。 当虚拟机启动时，用户需要指定一个要执行的主类（ 包含main()方法的那个类），虚拟机会先初始化这个主类。 当使用JDK 1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄， 并且这个方法句柄所对应的类没有进行过初始化， 则需要先触发其初始化。 这五种情况称为对一个类进行主动引用。其余情况都不会触发初始化，称为被动引用。\n  主动引用 首先准备两个类用户测试其是否初始化。\n  SuperClass\npackage cn.lastwhisper.jvm.classloading.initiative;\r\/**\r* @author lastwhisper\r*\/\rpublic class SuperClass {\rpublic static int value = 123;\rstatic {\rSystem.out.println(\x26#34;SuperClass static code init!\x26#34;);\r}\rpublic SuperClass() {\rSystem.out.println(\x26#34;SuperClass constructor init! \x26#34;);\r}\rpublic static int getValue() {\rreturn value;\r}\rpublic static void setValue(int value) {\rSuperClass.",
+    "inLanguage" : "zh-CN",
+    "author" : "jiewen",
+    "creator" : "jiewen",
+    "publisher": "jiewen",
+    "accountablePerson" : "jiewen",
+    "copyrightHolder" : "jiewen",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-09-26 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-09-26 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/blog.rua.run\/posts\/java-class-init\/",
+    "wordCount" : "580",
+    "keywords" : [  "Note"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <a class="menu-item" href="/about/" title=""></a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <a class="menu-item" href="/about/" title=""></a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">java类初始化详解</h1>
+        <div class="post-meta">
+            Written by <a itemprop="name" href="https://blog.rua.run"
+                rel="author">jiewen</a>
+            with ♥
+            <span class="post-time">
+                on <time datetime=2019-09-26
+                    itemprop="datePublished">2019-09-26</time>
+            </span>
+            in
+            <i class="iconfont icon-folder"></i>
+            <span class="post-category">
+                <a href="https://blog.rua.run/categories/java/"> java </a>
+                
+            </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+        
+        
+
+        
+        
+
+        
+        
+        
+
+        
+        
+        
+
+        <ol>
+<li>
+<p>概述
+类从被加载到虚拟机内存中开始，到卸载出内存为止，它的整个生命周期包括：<strong>加载（Loading）</strong>、<strong>验证（Verification）</strong>、<strong>准备（Preparation）</strong>、<strong>解析（Resolution）</strong>、<strong>初始化（Initialization）</strong>、<strong>使用（Useing）</strong>、**卸载（Unloading）**7个阶段。其中验证、准备和解析3个部分统称为连接（Linking），这7个阶段的发生顺序如图所示。</p>
+<p><img src="/images/javaClass.png" alt="java-class"></p>
+<h3 id="类的生命周期">类的生命周期</h3>
+<p>加载、验证、准备、初始化和卸载这5个阶段的顺序是确定的，类的加载过程
+必须按照这种顺序按部就班地开始，而解析阶段则不一定：它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定（也称为动态绑定或晚期绑定） 。</p>
+<p>对于初始化阶段，虚拟机规范则是严格规定了有且只有5种情况必须立即对类进行“初始化”（ 而加载、 验证、 准备自然需要在此之前开始）：</p>
+<p>遇到new、getstatic、putstatic或invokestatic这4条字节码指令时，如果类没有进行过初始化，则需要先触发其初始化。
+使用java.lang.reflect包的方法对类进行反射调用的时候，如果类没有进行过初始化，则需要先触发其初始化。
+当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。
+当虚拟机启动时，用户需要指定一个要执行的主类（ 包含main()方法的那个类），虚拟机会先初始化这个主类。
+当使用JDK 1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄， 并且这个方法句柄所对应的类没有进行过初始化， 则需要先触发其初始化。
+这五种情况称为对一个类进行主动引用。其余情况都不会触发初始化，称为被动引用。</p>
+</li>
+<li>
+<p>主动引用
+首先准备两个类用户测试其是否初始化。</p>
+</li>
+</ol>
+<p>SuperClass</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#fff;font-weight:bold">package</span> cn.lastwhisper.jvm.classloading.initiative;
+
+<span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> SuperClass {
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">int</span> value = 123;
+
+    <span style="color:#fff;font-weight:bold">static</span> {
+        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(<span style="color:#0ff;font-weight:bold">&#34;SuperClass static code init!&#34;</span>);
+    }
+
+    <span style="color:#fff;font-weight:bold">public</span> SuperClass() {
+        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(<span style="color:#0ff;font-weight:bold">&#34;SuperClass constructor init! &#34;</span>);
+    }
+
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">int</span> getValue() {
+        <span style="color:#fff;font-weight:bold">return</span> value;
+    }
+
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">void</span> setValue(<span style="color:#fff;font-weight:bold">int</span> value) {
+        SuperClass.<span style="color:#007f7f">value</span> = value;
+    }
+}
+</code></pre></div><p>SubClass 继承自SuperClass</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#fff;font-weight:bold">package</span> cn.lastwhisper.jvm.classloading.initiative;
+
+<span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> SubClass <span style="color:#fff;font-weight:bold">extends</span> SuperClass {
+
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">int</span> subvalue = 456;
+
+    <span style="color:#fff;font-weight:bold">static</span> {
+        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(<span style="color:#0ff;font-weight:bold">&#34;SubClass static code init!&#34;</span>);
+    }
+
+    <span style="color:#fff;font-weight:bold">public</span> SubClass() {
+        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(<span style="color:#0ff;font-weight:bold">&#34;SubClass constructor init! &#34;</span>);
+    }
+
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">int</span> getSubvalue() {
+        <span style="color:#fff;font-weight:bold">return</span> subvalue;
+    }
+
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">void</span> setSubvalue(<span style="color:#fff;font-weight:bold">int</span> subvalue) {
+        SubClass.<span style="color:#007f7f">subvalue</span> = subvalue;
+    }
+}
+</code></pre></div><p>2.1 情景一
+遇到new、getstatic、putstatic或invokestatic这4条字节码指令时，如果类没有进行过初始化，则需要先触发其初始化。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#fff;font-weight:bold">package</span> cn.lastwhisper.jvm.classloading.initiative;
+
+<span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * 主动引用触发初始化、演示一
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> Initialization1 {
+    <span style="color:#007f7f">// 遇到new、getstatic、putstatic或invokestatic这4条字节码指令时，
+</span><span style="color:#007f7f"></span>    <span style="color:#007f7f">// 如果类没有进行过初始化，则需要先触发其初始化。
+</span><span style="color:#007f7f"></span>    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">void</span> main(String[] args) {
+        <span style="color:#007f7f">// 1.new字节码指令
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">//SubClass subClass = new SubClass();
+</span><span style="color:#007f7f"></span>
+        <span style="color:#007f7f">// 2.getstatic字节码指令
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">// 被final修饰、已在编译期把结果放入常量池的静态字段除外
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">//int subvalue = SubClass.subvalue;
+</span><span style="color:#007f7f"></span>
+        <span style="color:#007f7f">// 3.setstatic字节码指令
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">// 被final修饰、已在编译期把结果放入常量池的静态字段除外
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">//SubClass.subvalue = 789;
+</span><span style="color:#007f7f"></span>
+        <span style="color:#007f7f">// 4.invokestatic字节码指令
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">//SubClass.getSubvalue();
+</span><span style="color:#007f7f"></span>    }
+}
+</code></pre></div><p>2.2 情景二
+使用java.lang.reflect包的方法对类进行反射调用的时候，如果类没有进行过初始化，则需要先触发其初始化。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#fff;font-weight:bold">package</span> cn.lastwhisper.jvm.classloading.initiative;
+
+<span style="color:#fff;font-weight:bold">import</span> java.lang.reflect.Constructor;
+
+<span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * 主动引用触发初始化、演示二
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> Initialization2 {
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">void</span> main(String[] args) {
+        <span style="color:#007f7f">// 使用java.lang.reflect包的方法对类进行反射调用的时候，
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">// 如果类没有进行过初始化，则需要先触发其初始化。
+</span><span style="color:#007f7f"></span>
+        <span style="color:#fff;font-weight:bold">try</span> {
+            <span style="color:#007f7f">// 使用Class.forName();也行，不要使用对象.class。
+</span><span style="color:#007f7f"></span>            Class&lt;SubClass&gt; clazz = SubClass.<span style="color:#007f7f">class</span>;
+            Constructor&lt;SubClass&gt; constructor = clazz.<span style="color:#007f7f">getConstructor</span>();
+            constructor.<span style="color:#007f7f">newInstance</span>();
+        } <span style="color:#fff;font-weight:bold">catch</span> (Exception e) {
+            e.<span style="color:#007f7f">printStackTrace</span>();
+        }
+    }
+}
+</code></pre></div><p>2.3 情景三
+当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#fff;font-weight:bold">package</span> cn.lastwhisper.jvm.classloading.initiative;
+
+<span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * 主动引用触发初始化、演示三
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> Initialization3 {
+    <span style="color:#007f7f">// 当初始化一个类的时候，如果发现其父类还没有进行过初始化，
+</span><span style="color:#007f7f"></span>    <span style="color:#007f7f">// 则需要先触发其父类的初始化
+</span><span style="color:#007f7f"></span>    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">void</span> main(String[] args) {
+        <span style="color:#007f7f">// 在Initialization1的new指令和Initialization2的反射创建对象都有体现
+</span><span style="color:#007f7f"></span>        SubClass subClass = <span style="color:#fff;font-weight:bold">new</span> SubClass();
+        <span style="color:#007f7f">//初始化顺序
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">//SuperClass static code init!  首先初始化父类静态代码块
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">//SubClass static code init!    其次初始化自己的静态代码块
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">//SuperClass constructor init!  其次初始化父类的构造器
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">//SubClass constructor init!    其次初始化自己的构造器
+</span><span style="color:#007f7f"></span>    }
+}
+</code></pre></div><p>2.4 情景四
+当虚拟机启动时，用户需要指定一个要执行的主类（ 包含main()方法的那个类），虚拟机会先初始化这个主类。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#fff;font-weight:bold">package</span> cn.lastwhisper.jvm.classloading.initiative;
+
+<span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * 主动引用触发初始化、演示四
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> Initialization4 {
+
+    <span style="color:#fff;font-weight:bold">static</span> {
+        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(<span style="color:#0ff;font-weight:bold">&#34;Initialization4 static code init!&#34;</span>);
+    }
+
+    <span style="color:#fff;font-weight:bold">public</span> Initialization4() {
+        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(<span style="color:#0ff;font-weight:bold">&#34;Initialization4 constructor init!&#34;</span>);
+    }
+
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">void</span> main(String[] args) {
+        <span style="color:#007f7f">// 当虚拟机启动时，用户需要指定一个要执行的主类(包含main()方法的那个类)，虚拟机会先初始化这个主类。
+</span><span style="color:#007f7f"></span>    }
+}
+</code></pre></div><p>2.5 情景五
+当使用JDK 1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄， 并且这个方法句柄所对应的类没有进行过初始化， 则需要先触发其初始化。</p>
+<p>首先创建一个MethodHandleClass类</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#fff;font-weight:bold">package</span> cn.lastwhisper.jvm.classloading.initiative;
+
+<span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> MethodHandleClass {
+
+    <span style="color:#fff;font-weight:bold">static</span> {
+        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(<span style="color:#0ff;font-weight:bold">&#34;MethodHandleClass static code init!&#34;</span>);
+    }
+    <span style="color:#fff;font-weight:bold">public</span> MethodHandleClass() {
+        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(<span style="color:#0ff;font-weight:bold">&#34;MethodHandleClass constructor init!&#34;</span>);
+    }
+
+    <span style="color:#007f7f">// REF_invokeStatic
+</span><span style="color:#007f7f"></span>    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">void</span> testREF_invokeStatic(String str) {
+        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(str);
+    }
+
+}
+
+<span style="color:#fff;font-weight:bold">package</span> cn.lastwhisper.jvm.classloading.initiative;
+
+<span style="color:#fff;font-weight:bold">import</span> java.lang.invoke.MethodHandle;
+<span style="color:#fff;font-weight:bold">import</span> java.lang.invoke.MethodHandles;
+<span style="color:#fff;font-weight:bold">import</span> java.lang.invoke.MethodType;
+
+<span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * 主动引用触发初始化、演示五
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> Initialization5 {
+
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">void</span> main(String[] args) {
+
+        MethodHandles.<span style="color:#007f7f">Lookup</span> lookup = MethodHandles.<span style="color:#007f7f">lookup</span>();
+        <span style="color:#fff;font-weight:bold">try</span> {
+            <span style="color:#007f7f">// REF_invokeStatic
+</span><span style="color:#007f7f"></span>            MethodHandle testREF_invokeStatic = lookup.<span style="color:#007f7f">findStatic</span>(MethodHandleClass.<span style="color:#007f7f">class</span>, <span style="color:#0ff;font-weight:bold">&#34;testREF_invokeStatic&#34;</span>, MethodType.<span style="color:#007f7f">methodType</span>(<span style="color:#fff;font-weight:bold">void</span>.<span style="color:#007f7f">class</span>, String.<span style="color:#007f7f">class</span>));
+            testREF_invokeStatic.<span style="color:#007f7f">invoke</span>(<span style="color:#0ff;font-weight:bold">&#34;啥也不干，打印一段话&#34;</span>);
+
+            <span style="color:#007f7f">// REF_getStatic
+</span><span style="color:#007f7f"></span>
+            <span style="color:#007f7f">// REF_putStatic
+</span><span style="color:#007f7f"></span>        } <span style="color:#fff;font-weight:bold">catch</span> (NoSuchMethodException e) {
+            e.<span style="color:#007f7f">printStackTrace</span>();
+        } <span style="color:#fff;font-weight:bold">catch</span> (IllegalAccessException e) {
+            e.<span style="color:#007f7f">printStackTrace</span>();
+        } <span style="color:#fff;font-weight:bold">catch</span> (Throwable throwable) {
+            throwable.<span style="color:#007f7f">printStackTrace</span>();
+        }
+    }
+}
+</code></pre></div><ol start="3">
+<li>被动引用
+被动引用不会触发类的初始化</li>
+</ol>
+<p>3.1 情景一
+子类引用父类的静态字段，只会触发子类的加载、父类的初始化，不会导致子类初始化</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#fff;font-weight:bold">package</span> cn.lastwhisper.jvm.classloading.passive;
+
+<span style="color:#fff;font-weight:bold">import</span> cn.lastwhisper.jvm.classloading.initiative.SubClass;
+
+<span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * 被动使用类字段不触发初始化、演示一
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> NotInitialization1 {
+    <span style="color:#007f7f">// 子类引用父类的静态字段，只会触发子类的加载、父类的初始化，不会导致子类初始化
+</span><span style="color:#007f7f"></span>    <span style="color:#007f7f">// 是否要触发子类的加载和验证，在虚拟机规范中并未明确规定，这点取决于虚拟机的具体实现
+</span><span style="color:#007f7f"></span>    <span style="color:#007f7f">// 对于Sun HotSpot虚拟机，可通过-XX:+TraceClassLoading参数观察到此操作会导致子类的加载
+</span><span style="color:#007f7f"></span>    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">void</span> main(String[] args) {
+        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(SubClass.<span style="color:#007f7f">value</span>);
+        <span style="color:#007f7f">//[Loaded cn.lastwhisper.jvm.classloading.passive.SubClass from ...]
+</span><span style="color:#007f7f"></span>    }
+}
+</code></pre></div><p>打印结果：子类并未初始化</p>
+<p>SuperClass static code init!
+123
+3.2 情景二
+通过数组定义来引用类，不会触发此类的初始化</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#fff;font-weight:bold">package</span> cn.lastwhisper.jvm.classloading.passive;
+
+<span style="color:#fff;font-weight:bold">import</span> cn.lastwhisper.jvm.classloading.initiative.SuperClass;
+
+<span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * 被动使用类字段不触发初始化、演示二
+</span><span style="color:#007f7f"> * -XX:+TraceClassLoading
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> NotInitialization2 {
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">void</span> main(String[] args){
+        <span style="color:#007f7f">// 通过数组定义来引用类，不会触发此类的初始化
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">// 会触发L+全类名的初始化
+</span><span style="color:#007f7f"></span>        SuperClass[] superClasses = <span style="color:#fff;font-weight:bold">new</span> SuperClass[10];
+    }
+}
+</code></pre></div><p>3.3 情景三
+常量在编译阶段会进行常量优化，将常量存入调用类的常量池中，
+本质上并没有直接引用到定义常量的类，因此不会触发定义常量的类的初始化。</p>
+<p>创建一个被static final修饰的类。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> ConstClass {
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">final</span> String HELLOWORLD = <span style="color:#0ff;font-weight:bold">&#34;hello world&#34;</span>;
+
+    <span style="color:#fff;font-weight:bold">static</span> {
+        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(<span style="color:#0ff;font-weight:bold">&#34;ConstClass init!&#34;</span>);
+    }
+}
+<span style="color:#fff;font-weight:bold">package</span> cn.lastwhisper.jvm.classloading.passive;
+
+<span style="color:#007f7f">/**
+</span><span style="color:#007f7f"> * 被动使用类字段不触发初始化、演示三
+</span><span style="color:#007f7f"> * @author lastwhisper
+</span><span style="color:#007f7f"> */</span>
+<span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">class</span> NotInitialization3 {
+    <span style="color:#fff;font-weight:bold">public</span> <span style="color:#fff;font-weight:bold">static</span> <span style="color:#fff;font-weight:bold">void</span> main(String[] args) {
+        <span style="color:#007f7f">// 常量在编译阶段会进行常量优化，将常量存入**调用类**的常量池中，
+</span><span style="color:#007f7f"></span>        <span style="color:#007f7f">// 本质上并没有直接引用到定义常量的类，因此不会触发定义常量的类的初始化。
+</span><span style="color:#007f7f"></span>        System.<span style="color:#007f7f">out</span>.<span style="color:#007f7f">println</span>(ConstClass.<span style="color:#007f7f">HELLOWORLD</span>);
+        <span style="color:#007f7f">// hello world
+</span><span style="color:#007f7f"></span>    }
+}
+</code></pre></div><p>打印结果：ConstClass类并未初始化。</p>
+<p><a href="https://www.jianshu.com/p/3afa5d24bf71">原文</a></p>
+<p>参考
+《深入理解Java虚拟机》</p>
+
+    </div>
+
+    <div class="post-copyright">
+        
+
+        
+        <p class="copyright-item">
+            <span>Link:</span>
+            <a href=https://blog.rua.run/posts/java-class-init/>https://blog.rua.run/posts/java-class-init/</span>
+        </p>
+        
+        
+    </div>
+
+
+    <div class="post-tags">
+        
+        <section>
+            <a href="javascript:window.history.back();">back</a></span> ·
+            <span><a href="https://blog.rua.run">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://blog.rua.run/posts/spring-transaction/" class="prev" rel="prev" title="Spring事务"><i
+                class="iconfont icon-left"></i>&nbsp;Spring事务</a>
+        
+        
+        <a href="https://blog.rua.run/posts/thread-wait-sleep/" class="next" rel="next"
+            title="java 多线程">java 多线程&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+        
+        
+    </div>
+    
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>
