@@ -6,10 +6,35 @@
     <description>Recent content in Posts on Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 27 Apr 2020 23:28:47 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 07 May 2020 16:52:08 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.rua.run/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Spring学习笔记</title>
+      <link>https://blog.rua.run/posts/spring/spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Thu, 07 May 2020 16:52:08 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/posts/spring/spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>Spring简介 Spring是一个分层的全栈轻量级开源框架，以Ioc和AOP为内核，提供了展现层SpringMVC和业务层事务等众多的企业级应用技术，还能整合众多开源的第三方框架，已经成为使用最多的java EE企业级应用开源框架。
+Spring的优势   方便解耦，简化开发
+  AOP编程的支持
+  声明式事务的支持
+  方便程序测试
+  方便集成各种优秀框架
+  降低使用Java EE API的难度
+  Spring的核心结构 Web、Data Access、Core container、Test、AOP/Aspects
+IoC IoC是什么？ IoC(Inversion of Control)控制反转
+IoC解决了什么问题？ IoC之前，组件间的协调关系是通过new关键字来实现两组件之间的依赖关系的，造成了两组件之间的互相耦合，
+IoC实现是在运行期将组件间的某种依赖关系动态的注入组件中。
+IoC的实现方式方式以及DI   依赖查找(Dependency Lookup)
+容器中的对象通过容器的API来查找所依赖的资源和协作对象，无法在容器外部使用
+  依赖注入(Dependency Injection)
+依赖注入就是将被依赖的资源注入到使用它的地方，注入方式分为 setter和构造函数注入
+  Spring采用依赖注入的方式实现IoC容器
+Spring IoC循环依赖    map 作用     singletonObjects 用于存放完全初始化好的bean，从该缓存中取出的 bean 可以直接使用   earlySingletonObjects 存放早期bean 对象（尚未填充属性），用于解决循环依赖   singletonFactories 存放 bean 工厂对象，填充的属性是循环依赖的话调用该工厂方法（实际去返回beanFactory的earlySingletonObjects中的bean），用于解决循环依赖    如图和表格所示，在bean的生命周期中，spring通过三个map来处理循环依赖。就是将未初始化属性的bean作为被依赖的对象设置到其它bean中</description>
+    </item>
     
     <item>
       <title>mybatis学习笔记</title>

@@ -2,6 +2,56 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
     <url>
+      <loc>https://blog.rua.run/</loc>
+      
+      <lastmod>2020-05-07T16:52:08+08:00</lastmod>
+      
+      
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://blog.rua.run/posts/</loc>
+      
+      <lastmod>2020-05-07T16:52:08+08:00</lastmod>
+      
+      
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://blog.rua.run/tags/spring/</loc>
+      
+      <lastmod>2020-05-07T16:52:08+08:00</lastmod>
+      
+      
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://blog.rua.run/posts/spring/spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+      
+      <lastmod>2020-05-07T16:52:08+08:00</lastmod>
+      
+      
+      
+      
+    </url>
+  
+    <url>
+      <loc>https://blog.rua.run/tags/</loc>
+      
+      <lastmod>2020-05-07T16:52:08+08:00</lastmod>
+      
+      
+      
+      
+    </url>
+  
+    <url>
       <loc>https://blog.rua.run/tags/mybatis/</loc>
       
       <lastmod>2020-04-27T23:28:47+08:00</lastmod>
@@ -13,36 +63,6 @@
   
     <url>
       <loc>https://blog.rua.run/posts/mybatis/mybatis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-      
-      <lastmod>2020-04-27T23:28:47+08:00</lastmod>
-      
-      
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://blog.rua.run/</loc>
-      
-      <lastmod>2020-04-27T23:28:47+08:00</lastmod>
-      
-      
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://blog.rua.run/posts/</loc>
-      
-      <lastmod>2020-04-27T23:28:47+08:00</lastmod>
-      
-      
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://blog.rua.run/tags/</loc>
       
       <lastmod>2020-04-27T23:28:47+08:00</lastmod>
       
@@ -133,16 +153,6 @@
   
     <url>
       <loc>https://blog.rua.run/posts/java-class-init/</loc>
-      
-      <lastmod>2019-09-26T00:00:00+00:00</lastmod>
-      
-      
-      
-      
-    </url>
-  
-    <url>
-      <loc>https://blog.rua.run/categories/spring/</loc>
       
       <lastmod>2019-09-26T00:00:00+00:00</lastmod>
       
