@@ -22,10 +22,10 @@
   <title>
        
        
-           Spring学习笔记 | Note
+           SpringMVC学习笔记 | Note
        
   </title>
-  <meta name="title" content="Spring学习笔记 | Note">
+  <meta name="title" content="SpringMVC学习笔记 | Note">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -44,8 +44,8 @@
          "@id": "https:\/\/blog.rua.run"
     },
     "articleSection" : "posts",
-    "name" : "Spring学习笔记",
-    "headline" : "Spring学习笔记",
+    "name" : "SpringMVC学习笔记",
+    "headline" : "SpringMVC学习笔记",
     "description" : "Spring MVC 九⼤组件   HandlerMapping（处理器映射器）\nHandlerMapping 是⽤来查找 Handler 的，也就是处理器，具体的表现形式可以是类，也可以是\n⽅法。⽐如，标注了@RequestMapping的每个⽅法都可以看成是⼀个Handler。Handler负责具\n体实际的请求处理，在请求到达后，HandlerMapping 的作⽤便是找到请求相应的处理器\n  Handler 和 Interceptor.\nHandlerAdapter（处理器适配器）HandlerAdapter 是⼀个适配器。因为 Spring MVC 中 Handler 可以是任意形式的，只要能处理请\n求即可。但是把请求交给 Servlet 的时候，由于 Servlet 的⽅法结构都是\ndoService(HttpServletRequest req,HttpServletResponse resp)形式的，要让固定的 Servlet 处理\n⽅法调⽤ Handler 来进⾏处理，便是 HandlerAdapter 的职责。\n  HandlerExceptionResolver\nHandlerExceptionResolver ⽤于处理 Handler 产⽣的异常情况。它的作⽤是根据异常设置\nModelAndView，之后交给渲染⽅法进⾏渲染，渲染⽅法会将 ModelAndView 渲染成⻚⾯。\n  ViewResolver\nViewResolver即视图解析器，⽤于将String类型的视图名和Locale解析为View类型的视图，只有⼀\n个resolveViewName()⽅法。从⽅法的定义可以看出，Controller层返回的String类型视图名\nviewName 最终会在这⾥被解析成为View。View是⽤来渲染⻚⾯的，也就是说，它会将程序返回\n的参数和数据填⼊模板中，⽣成html⽂件。ViewResolver 在这个过程主要完成两件事情：\nViewResolver 找到渲染所⽤的模板（第⼀件⼤事）和所⽤的技术（第⼆件⼤事，其实也就是找到\n视图的类型，如JSP）并填⼊参数。默认情况下，Spring MVC会⾃动为我们配置⼀个\nInternalResourceViewResolver,是针对 JSP 类型视图的。\n  RequestToViewNameTranslator\nRequestToViewNameTranslator 组件的作⽤是从请求中获取 ViewName.",
     "inLanguage" : "zh-CN",
     "author" : "jiewen",
@@ -120,7 +120,7 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Spring学习笔记</h1>
+        <h1 class="post-title" itemprop="name headline">SpringMVC学习笔记</h1>
         <div class="post-meta">
             Written by <a itemprop="name" href="https://blog.rua.run"
                 rel="author">jiewen</a>
