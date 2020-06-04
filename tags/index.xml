@@ -6,10 +6,19 @@
     <description>Recent content in Tags on Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 23 May 2020 22:06:03 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jun 2020 17:04:14 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.rua.run/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>tomcat</title>
+      <link>https://blog.rua.run/tags/tomcat/</link>
+      <pubDate>Thu, 04 Jun 2020 17:04:14 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/tags/tomcat/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>springboot</title>
