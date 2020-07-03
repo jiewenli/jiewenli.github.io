@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  <link rel="prev" href="https://blog.rua.run/posts/mybatis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+  <link rel="next" href="https://blog.rua.run/posts/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+  <link rel="canonical" href="https://blog.rua.run/posts/spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           Spring学习笔记 | Note
+       
+  </title>
+  <meta name="title" content="Spring学习笔记 | Note">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.rua.run"
+    },
+    "articleSection" : "posts",
+    "name" : "Spring学习笔记",
+    "headline" : "Spring学习笔记",
+    "description" : "Spring简介 Spring是一个分层的全栈轻量级开源框架，以Ioc和AOP为内核，提供了展现层SpringMVC和业务层事务等众多的企业级应用技术，还能整合众多开源的第三方框架，已经成为使用最多的java EE企业级应用开源框架。\nSpring的优势   方便解耦，简化开发\n  AOP编程的支持\n  声明式事务的支持\n  方便程序测试\n  方便集成各种优秀框架\n  降低使用Java EE API的难度\n  Spring的核心结构 Web、Data Access、Core container、Test、AOP\/Aspects\nIoC IoC是什么？ IoC(Inversion of Control)控制反转\nIoC解决了什么问题？ IoC之前，组件间的协调关系是通过new关键字来实现两组件之间的依赖关系的，造成了两组件之间的互相耦合，\nIoC实现是在运行期将组件间的某种依赖关系动态的注入组件中。\nIoC的实现方式方式以及DI   依赖查找(Dependency Lookup)\n容器中的对象通过容器的API来查找所依赖的资源和协作对象，无法在容器外部使用\n  依赖注入(Dependency Injection)\n依赖注入就是将被依赖的资源注入到使用它的地方，注入方式分为 setter和构造函数注入\n  Spring采用依赖注入的方式实现IoC容器\nSpring IoC循环依赖    map 作用     singletonObjects 用于存放完全初始化好的bean，从该缓存中取出的 bean 可以直接使用   earlySingletonObjects 存放早期bean 对象（尚未填充属性），用于解决循环依赖   singletonFactories 存放 bean 工厂对象，填充的属性是循环依赖的话调用该工厂方法（实际去返回beanFactory的earlySingletonObjects中的bean），用于解决循环依赖    如图和表格所示，在bean的生命周期中，spring通过三个map来处理循环依赖。就是将未初始化属性的bean作为被依赖的对象设置到其它bean中",
+    "inLanguage" : "zh-CN",
+    "author" : "jiewen",
+    "creator" : "jiewen",
+    "publisher": "jiewen",
+    "accountablePerson" : "jiewen",
+    "copyrightHolder" : "jiewen",
+    "copyrightYear" : "2020",
+    "datePublished": "2020-05-07 16:52:08 \x2b0800 CST",
+    "dateModified" : "2020-05-07 16:52:08 \x2b0800 CST",
+    "url" : "https:\/\/blog.rua.run\/posts\/spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0\/",
+    "wordCount" : "139",
+    "keywords" : [ "spring", "Note"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Spring学习笔记</h1>
+        <div class="post-meta">
+            Written by <a itemprop="name" href="https://blog.rua.run"
+                rel="author">jiewen</a>
+            with ♥
+            <span class="post-time">
+                on <time datetime=2020-05-07
+                    itemprop="datePublished">2020-05-07</time>
+            </span>
+            in
+            <i class="iconfont icon-folder"></i>
+            <span class="post-category">
+                <a href="https://blog.rua.run/categories/spring/"> spring </a>
+                
+            </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+        
+        
+
+        
+        
+
+        
+        
+        
+
+        
+        
+        
+
+        <h2 id="spring简介">Spring简介</h2>
+<p>Spring是一个分层的全栈轻量级开源框架，以Ioc和AOP为内核，提供了展现层SpringMVC和业务层事务等众多的企业级应用技术，还能整合众多开源的第三方框架，已经成为使用最多的java EE企业级应用开源框架。</p>
+<h2 id="spring的优势">Spring的优势</h2>
+<ul>
+<li>
+<p>方便解耦，简化开发</p>
+</li>
+<li>
+<p>AOP编程的支持</p>
+</li>
+<li>
+<p>声明式事务的支持</p>
+</li>
+<li>
+<p>方便程序测试</p>
+</li>
+<li>
+<p>方便集成各种优秀框架</p>
+</li>
+<li>
+<p>降低使用Java EE API的难度</p>
+</li>
+</ul>
+<h2 id="spring的核心结构">Spring的核心结构</h2>
+<p>Web、Data Access、Core container、Test、AOP/Aspects</p>
+<h2 id="ioc">IoC</h2>
+<h3 id="ioc是什么">IoC是什么？</h3>
+<p>IoC(Inversion of Control)控制反转</p>
+<h3 id="ioc解决了什么问题">IoC解决了什么问题？</h3>
+<p>IoC之前，组件间的协调关系是通过new关键字来实现两组件之间的依赖关系的，造成了两组件之间的互相耦合，</p>
+<p>IoC实现是在运行期将组件间的某种依赖关系动态的注入组件中。</p>
+<h3 id="ioc的实现方式方式以及di">IoC的实现方式方式以及DI</h3>
+<ol>
+<li>
+<p>依赖查找(Dependency Lookup)</p>
+<p>容器中的对象通过容器的API来查找所依赖的资源和协作对象，无法在容器外部使用</p>
+</li>
+<li>
+<p>依赖注入(Dependency Injection)</p>
+<p>依赖注入就是将被依赖的资源注入到使用它的地方，注入方式分为 setter和构造函数注入</p>
+</li>
+</ol>
+<p>Spring采用依赖注入的方式实现IoC容器</p>
+<h3 id="spring-ioc循环依赖">Spring IoC循环依赖</h3>
+<p><img src="/images/xhyl.png" alt="循环依赖"></p>
+<table>
+<thead>
+<tr>
+<th>map</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>singletonObjects</td>
+<td>用于存放完全初始化好的bean，从该缓存中取出的 bean 可以直接使用</td>
+</tr>
+<tr>
+<td>earlySingletonObjects</td>
+<td>存放早期bean 对象（尚未填充属性），用于解决循环依赖</td>
+</tr>
+<tr>
+<td>singletonFactories</td>
+<td>存放 bean 工厂对象，填充的属性是循环依赖的话调用该工厂方法（实际去返回beanFactory的earlySingletonObjects中的bean），用于解决循环依赖</td>
+</tr>
+</tbody>
+</table>
+<p>如图和表格所示，在bean的生命周期中，spring通过三个map来处理循环依赖。就是将未初始化属性的bean作为被依赖的对象设置到其它bean中</p>
+<h3 id="lazy-init延迟加载">Lazy-Init延迟加载</h3>
+<p>单例可以延迟加载，其它Scope的bean不能延迟加载</p>
+<p>延迟加载有两种配置方式</p>
+<ul>
+<li>注解@Lazy</li>
+<li>xml <!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+</ul>
+<p>延迟加载是通过创建代理对象来实现的</p>
+<h3 id="factorybean和beanfactory">FactoryBean和BeanFactory</h3>
+<ul>
+<li>
+<p>BeanFactory</p>
+<p>是Spring Ioc 的顶层接口，提供了Ioc容器最基本的接口</p>
+</li>
+<li>
+<p>FactoryBean</p>
+<p>Spring通过反射来实现指定类实例化，如果Bean的实例化过程比较复杂，Spring提供了FactoryBean接口，可以通过实现该接口来定制实例化Bean的逻辑，一般用于第三方框架集成到Spring</p>
+</li>
+</ul>
+<h3 id="postbeanprocessor处理器">PostBeanProcessor处理器</h3>
+<p>在Bean的生命周期中，PostBeanProcessor在bean属性初始化之前和之后分别调用了Before&hellip;和After..方法，是Spring提供的可以参与Bean创建的生命周期的一个接口，用户可以通过实现该接口来修改Bean。Spring框架中的AutowiredAnnotationBeanPostProcessor（属性自动装配）、ApplicationContextAwareProcessor（Aware注入)等都是它的实现</p>
+<h2 id="aop">AOP</h2>
+<h3 id="什么是aop">什么是AOP？</h3>
+<p>AOP：Aspect oriented Programming 面向切面编程</p>
+<p>AOP是OOP的延续，OOP的三大特性：封装、继承、多态，AOP采用横向抽取机制，取代了OOP纵向继承体系避免重复性代码的方式。</p>
+<p>切：指的是横切逻辑，原方法逻辑代码不动，只操作横切逻辑代码</p>
+<p>面：横切逻辑影响很多个方法，一个方法的横切如同一个点，多个点构成面</p>
+<h3 id="aop解决了什么问题">AOP解决了什么问题？</h3>
+<p>原业务不变的情况下，增强横切逻辑代码，也避免了横切逻辑重复性代码，达到解耦合的目的</p>
+<h3 id="spring-aop">Spring AOP</h3>
+<p>相关概念</p>
+<ul>
+<li>
+<p>Aspect（切面）： Aspect 声明类似于 Java 中的类声明，在 Aspect 中会包含着一些 Pointcut 以及相应的 Advice。</p>
+</li>
+<li>
+<p>Joint point（连接点）：表示在程序中明确定义的点，典型的包括方法调用，对类成员的访问以及异常处理程序块的执行等等，它自身还可以嵌套其它 joint point。</p>
+</li>
+<li>
+<p>Pointcut（切点）：表示一组 joint point，这些 joint point 或是通过逻辑关系组合起来，或是通过通配、正则表达式等方式集中起来，它定义了相应的 Advice 将要发生的地方。</p>
+</li>
+<li>
+<p>Advice（增强）：Advice 定义了在 Pointcut 里面定义的程序点具体要做的操作，它通过 before、after 和 around 来区别是在每个 joint point 之前、之后还是代替执行的代码。</p>
+</li>
+<li>
+<p>Target（目标对象）：织入 Advice 的目标对象.。</p>
+</li>
+<li>
+<p>Weaving（织入）：将 Aspect 和其他对象连接起来, 并创建 Adviced object 的过程</p>
+</li>
+</ul>
+<p>在Spring中，通过cglib的动态代理功能实现了AOP，也封装了包括AspectJ切点表达式等功能</p>
+<h3 id="spring-事务">Spring 事务</h3>
+<p>关键对象</p>
+<ul>
+<li>
+<p>PlatformTransactionManager</p>
+<p>事务管理器，是管理事务的操作的，它只包含三个方法。获取事务，回滚事务，提交事务</p>
+</li>
+<li>
+<p>TransactionDefiition</p>
+<p>定义事务的类型，事务包含很多属性，是否可读，事务隔离级别,事务传播级别。通过事务的定义，我们根据定义获取特定的事务。</p>
+</li>
+<li>
+<p>TransactionStatus</p>
+<p>代表一个事务运行的状态，事务管理器通过状态可以知道事务的状态信息，然后进行事务的控制。事务是否完成，是否是新的事务，是不是只能回滚等</p>
+</li>
+</ul>
+<p>编程式事务</p>
+<p>​	直接在代码中使用Spring提供的对象来实现事务功能</p>
+<p>声明式事务</p>
+<p>​	使用@EnableTransactionManagement开启事务（同时Spring注册相关BeanDefinition）</p>
+<p>​	使用@Transactional来标记类或方法使用事务，并且可以设置事务的各种信息</p>
+
+    </div>
+
+    <div class="post-copyright">
+        
+
+        
+        <p class="copyright-item">
+            <span>Link:</span>
+            <a href=https://blog.rua.run/posts/spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/>https://blog.rua.run/posts/spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</span>
+        </p>
+        
+        
+    </div>
+
+
+    <div class="post-tags">
+        
+        <section>
+            <i class="iconfont icon-tag"></i>Tag(s):
+            
+            <span class="tag"><a href="https://blog.rua.run/tags/spring/">
+                    #spring</a></span>
+            
+        </section>
+        
+        <section>
+            <a href="javascript:window.history.back();">back</a></span> ·
+            <span><a href="https://blog.rua.run">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://blog.rua.run/posts/mybatis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="prev" rel="prev" title="mybatis学习笔记"><i
+                class="iconfont icon-left"></i>&nbsp;mybatis学习笔记</a>
+        
+        
+        <a href="https://blog.rua.run/posts/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="next" rel="next"
+            title="SpringMVC学习笔记">SpringMVC学习笔记&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+        
+        
+    </div>
+    
+<div class="post-toc">
+    <aside class="post-toc-aside">
+        
+        <nav id="TableOfContents">
+  <ol>
+    <li><a href="#spring简介">Spring简介</a></li>
+    <li><a href="#spring的优势">Spring的优势</a></li>
+    <li><a href="#spring的核心结构">Spring的核心结构</a></li>
+    <li><a href="#ioc">IoC</a>
+      <ol>
+        <li><a href="#ioc是什么">IoC是什么？</a></li>
+        <li><a href="#ioc解决了什么问题">IoC解决了什么问题？</a></li>
+        <li><a href="#ioc的实现方式方式以及di">IoC的实现方式方式以及DI</a></li>
+        <li><a href="#spring-ioc循环依赖">Spring IoC循环依赖</a></li>
+        <li><a href="#lazy-init延迟加载">Lazy-Init延迟加载</a></li>
+        <li><a href="#factorybean和beanfactory">FactoryBean和BeanFactory</a></li>
+        <li><a href="#postbeanprocessor处理器">PostBeanProcessor处理器</a></li>
+      </ol>
+    </li>
+    <li><a href="#aop">AOP</a>
+      <ol>
+        <li><a href="#什么是aop">什么是AOP？</a></li>
+        <li><a href="#aop解决了什么问题">AOP解决了什么问题？</a></li>
+        <li><a href="#spring-aop">Spring AOP</a></li>
+        <li><a href="#spring-事务">Spring 事务</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+    </aside>
+</div>
+
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

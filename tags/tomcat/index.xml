@@ -13,10 +13,10 @@
     
     <item>
       <title>Tomcat学习笔记</title>
-      <link>https://blog.rua.run/posts/tomcat/tomcat%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <link>https://blog.rua.run/posts/tomcat%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Thu, 04 Jun 2020 17:04:14 +0800</pubDate>
       
-      <guid>https://blog.rua.run/posts/tomcat/tomcat%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <guid>https://blog.rua.run/posts/tomcat%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
       <description>Tomcat简介 是什么？ Tomcat服务器 是一个开源的轻量级web应用服务器，用于开发servlet、jsp程序。tomcat将网络协议处理与业务请求处理分离。
 两大组件  Connector 负责Socket通信 Container 负责请求处理  Engine 是Servlet的引擎，可以包含多个Host Host 是一个虚拟主机的容器，可以有多个Context应用 Context 是一个web应用程序，可以有多个Wrapper容器 Wrapper 是Servlet的封装    其它组件 Tomcat 还有其它重要的组件，如安全组件 security、日志组件 logger 、session、mbeans、naming 等其它组件。这些组件共同为 Connector 和 Container 提供必要的服务。
 Tomcat Servlet 容器 Catalina Catalina是Tomcat的核心，Tomcat本质就是一个Servlet容器。

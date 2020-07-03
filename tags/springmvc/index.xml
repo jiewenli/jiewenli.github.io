@@ -13,10 +13,10 @@
     
     <item>
       <title>SpringMVC学习笔记</title>
-      <link>https://blog.rua.run/posts/springmvc/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <link>https://blog.rua.run/posts/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 18 May 2020 14:48:03 +0800</pubDate>
       
-      <guid>https://blog.rua.run/posts/springmvc/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <guid>https://blog.rua.run/posts/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
       <description>Spring MVC 九⼤组件   HandlerMapping（处理器映射器）
 HandlerMapping 是⽤来查找 Handler 的，也就是处理器，具体的表现形式可以是类，也可以是
 ⽅法。⽐如，标注了@RequestMapping的每个⽅法都可以看成是⼀个Handler。Handler负责具

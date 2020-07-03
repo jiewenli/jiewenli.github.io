@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>springmvc on Note</title>
+    <link>https://blog.rua.run/categories/springmvc/</link>
+    <description>Recent content in springmvc on Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 18 May 2020 14:48:03 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rua.run/categories/springmvc/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>SpringMVC学习笔记</title>
+      <link>https://blog.rua.run/posts/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 18 May 2020 14:48:03 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/posts/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>Spring MVC 九⼤组件   HandlerMapping（处理器映射器）
+HandlerMapping 是⽤来查找 Handler 的，也就是处理器，具体的表现形式可以是类，也可以是
+⽅法。⽐如，标注了@RequestMapping的每个⽅法都可以看成是⼀个Handler。Handler负责具
+体实际的请求处理，在请求到达后，HandlerMapping 的作⽤便是找到请求相应的处理器
+  Handler 和 Interceptor.
+HandlerAdapter（处理器适配器）HandlerAdapter 是⼀个适配器。因为 Spring MVC 中 Handler 可以是任意形式的，只要能处理请
+求即可。但是把请求交给 Servlet 的时候，由于 Servlet 的⽅法结构都是
+doService(HttpServletRequest req,HttpServletResponse resp)形式的，要让固定的 Servlet 处理
+⽅法调⽤ Handler 来进⾏处理，便是 HandlerAdapter 的职责。
+  HandlerExceptionResolver
+HandlerExceptionResolver ⽤于处理 Handler 产⽣的异常情况。它的作⽤是根据异常设置
+ModelAndView，之后交给渲染⽅法进⾏渲染，渲染⽅法会将 ModelAndView 渲染成⻚⾯。
+  ViewResolver
+ViewResolver即视图解析器，⽤于将String类型的视图名和Locale解析为View类型的视图，只有⼀
+个resolveViewName()⽅法。从⽅法的定义可以看出，Controller层返回的String类型视图名
+viewName 最终会在这⾥被解析成为View。View是⽤来渲染⻚⾯的，也就是说，它会将程序返回
+的参数和数据填⼊模板中，⽣成html⽂件。ViewResolver 在这个过程主要完成两件事情：
+ViewResolver 找到渲染所⽤的模板（第⼀件⼤事）和所⽤的技术（第⼆件⼤事，其实也就是找到
+视图的类型，如JSP）并填⼊参数。默认情况下，Spring MVC会⾃动为我们配置⼀个
+InternalResourceViewResolver,是针对 JSP 类型视图的。
+  RequestToViewNameTranslator
+RequestToViewNameTranslator 组件的作⽤是从请求中获取 ViewName.</description>
+    </item>
+    
+  </channel>
+</rss>

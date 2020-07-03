@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>tomcat on Note</title>
+    <link>https://blog.rua.run/categories/tomcat/</link>
+    <description>Recent content in tomcat on Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 04 Jun 2020 17:04:14 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rua.run/categories/tomcat/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Tomcat学习笔记</title>
+      <link>https://blog.rua.run/posts/tomcat%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Thu, 04 Jun 2020 17:04:14 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/posts/tomcat%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>Tomcat简介 是什么？ Tomcat服务器 是一个开源的轻量级web应用服务器，用于开发servlet、jsp程序。tomcat将网络协议处理与业务请求处理分离。
+两大组件  Connector 负责Socket通信 Container 负责请求处理  Engine 是Servlet的引擎，可以包含多个Host Host 是一个虚拟主机的容器，可以有多个Context应用 Context 是一个web应用程序，可以有多个Wrapper容器 Wrapper 是Servlet的封装    其它组件 Tomcat 还有其它重要的组件，如安全组件 security、日志组件 logger 、session、mbeans、naming 等其它组件。这些组件共同为 Connector 和 Container 提供必要的服务。
+Tomcat Servlet 容器 Catalina Catalina是Tomcat的核心，Tomcat本质就是一个Servlet容器。
+Catalina容器通过加载server.xml完成其它容器的创建和加载，通过一个Server容器来管理整个容器。
+Server通过实现Lifecycle接口，可以统一启动关闭整个容器来管理容器。Server内部可以有多个Service，Service是对多个Connector组件和一个Engine组件的绑定，Connector组件是tomcat连接器的部分，Engine代表整个Servlet引擎，是Servlet容器的封装。
+Tomcat 连接器组件 Coyote 连接器包含以下几种组件
+  EndPoint
+ 是socket通信的监听接收发送的处理器（TCP/IP协议处理)
+   Processor
+ 是协议处理接口，将接收到的字节流解析并处理成Request、Response对象(HTTP协议处理)
+   ProtocolHandler
+ 协议接口，通过EndPoint和Processor实现对具体协议和不同IO模型的处理
+   Adapter
+ 适配器，通过适配器来适配不同协议，生成标准的ServletRequest/ServletResponse交给容器处理
+   Tomcat类加载器 Tomcat作为一个web服务器，除了需要加载自身应用需要的类，还需要加载部署在tomcat的web应用的类，其中web应用相互隔离又共同依赖部分tomcat公共类(Servlet等)，所以tomcat打破了双亲委派机制。</description>
+    </item>
+    
+  </channel>
+</rss>

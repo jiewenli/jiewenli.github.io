@@ -6,22 +6,34 @@
     <description>Recent content in spring on Note</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 26 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 07 May 2020 16:52:08 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.rua.run/categories/spring/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Spring事务</title>
-      <link>https://blog.rua.run/posts/spring-transaction/</link>
-      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      <title>Spring学习笔记</title>
+      <link>https://blog.rua.run/posts/spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Thu, 07 May 2020 16:52:08 +0800</pubDate>
       
-      <guid>https://blog.rua.run/posts/spring-transaction/</guid>
-      <description>事务属性的种类： 传播行为、隔离级别、只读和事务超时
-  a) 传播行为定义了被调用方法的事务边界。
-   传播行为 意义     PROPERGATION_MANDATORY 表示方法必须运行在一个事务中，如果当前事务不存在，就抛出异常   PROPAGATION_NESTED 表示如果当前事务存在，则方法应该运行在一个嵌套事务中。否则，它看起来和 PROPAGATION_REQUIRED 看起来没什么两样   PROPAGATION_NEVER 表示方法不能运行在一个事务中，否则抛出异常   PROPAGATION_NOT_SUPPORTED 表示方法不能运行在一个事务中，如果当前存在一个事务，则该方法将被挂起   PROPAGATION_REQUIRED 表示当前方法必须运行在一个事务中，如果当前存在一个事务，那么该方法运行在这个事务中，否则，将创建一个新的事务   PROPAGATION_REQUIRES_NEW 表示当前方法必须运行在自己的事务中，如果当前存在一个事务，那么这个事务将在该方法运行期间被挂起   PROPAGATION_SUPPORTS 表示当前方法不需要运行在一个是事务中，但如果有一个事务已经存在，该方法也可以运行在这个事务中      b) 隔离级别
-在操作数据时可能带来 3 个副作用，分别是脏读、不可重复读、幻读。 为了避免这 3 中副作用的发生，在标准的 SQL 语句中定义了 4 种隔离级别，分别是未提交读、已提交读、可重复读、可序列化。 而在 spring 事务中提供了 5 种隔离级别来对应在 SQL 中定义的 4 种隔离级别，如下：
-   隔离级别 意义     ISOLATION_DEFAULT 使用后端数据库默认的隔离级别   ISOLATION_READ_UNCOMMITTED 允许读取未提交的数据（对应未提交读），可能导致脏读、不可重复读、幻读   ISOLATION_READ_COMMITTED 允许在一个事务中读取另一个已经提交的事务中的数据（对应已提交读）。可以避免脏读，但是无法避免不可重复读和幻读   ISOLATION_REPEATABLE_READ 一个事务不可能更新由另一个事务修改但尚未提交（回滚）的数据（对应可重复读）。可以避免脏读和不可重复读，但无法避免幻读   ISOLATION_SERIALIZABLE 这种隔离级别是所有的事务都在一个执行队列中，依次顺序执行，而不是并行（对应可序列化）。可以避免脏读、不可重复读、幻读。但是这种隔离级别效率很低，因此，除非必须，否则不建议使用。      c)只读</description>
+      <guid>https://blog.rua.run/posts/spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>Spring简介 Spring是一个分层的全栈轻量级开源框架，以Ioc和AOP为内核，提供了展现层SpringMVC和业务层事务等众多的企业级应用技术，还能整合众多开源的第三方框架，已经成为使用最多的java EE企业级应用开源框架。
+Spring的优势   方便解耦，简化开发
+  AOP编程的支持
+  声明式事务的支持
+  方便程序测试
+  方便集成各种优秀框架
+  降低使用Java EE API的难度
+  Spring的核心结构 Web、Data Access、Core container、Test、AOP/Aspects
+IoC IoC是什么？ IoC(Inversion of Control)控制反转
+IoC解决了什么问题？ IoC之前，组件间的协调关系是通过new关键字来实现两组件之间的依赖关系的，造成了两组件之间的互相耦合，
+IoC实现是在运行期将组件间的某种依赖关系动态的注入组件中。
+IoC的实现方式方式以及DI   依赖查找(Dependency Lookup)
+容器中的对象通过容器的API来查找所依赖的资源和协作对象，无法在容器外部使用
+  依赖注入(Dependency Injection)
+依赖注入就是将被依赖的资源注入到使用它的地方，注入方式分为 setter和构造函数注入
+  Spring采用依赖注入的方式实现IoC容器
+Spring IoC循环依赖    map 作用     singletonObjects 用于存放完全初始化好的bean，从该缓存中取出的 bean 可以直接使用   earlySingletonObjects 存放早期bean 对象（尚未填充属性），用于解决循环依赖   singletonFactories 存放 bean 工厂对象，填充的属性是循环依赖的话调用该工厂方法（实际去返回beanFactory的earlySingletonObjects中的bean），用于解决循环依赖    如图和表格所示，在bean的生命周期中，spring通过三个map来处理循环依赖。就是将未初始化属性的bean作为被依赖的对象设置到其它bean中</description>
     </item>
     
   </channel>

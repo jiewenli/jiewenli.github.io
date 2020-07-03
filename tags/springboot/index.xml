@@ -13,10 +13,10 @@
     
     <item>
       <title>Sprinboot学习笔记</title>
-      <link>https://blog.rua.run/posts/springboot/sprinboot%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <link>https://blog.rua.run/posts/sprinboot%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Sat, 23 May 2020 22:06:03 +0800</pubDate>
       
-      <guid>https://blog.rua.run/posts/springboot/sprinboot%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <guid>https://blog.rua.run/posts/sprinboot%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
       <description>Spring Boot简介 Spring Boot 简化了Spring的难度，提供了各种启动器，简省了繁重的配置，可以快速搭建启动的一站式解决方案
 Spring Boot核心注解 启动类上的@SpringBootApplication注解，包含了三个注解：
 ​## Spring Boot 学习笔记

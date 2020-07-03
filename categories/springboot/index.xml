@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>springboot on Note</title>
+    <link>https://blog.rua.run/categories/springboot/</link>
+    <description>Recent content in springboot on Note</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sat, 23 May 2020 22:06:03 +0800</lastBuildDate>
+    
+	<atom:link href="https://blog.rua.run/categories/springboot/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Sprinboot学习笔记</title>
+      <link>https://blog.rua.run/posts/sprinboot%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sat, 23 May 2020 22:06:03 +0800</pubDate>
+      
+      <guid>https://blog.rua.run/posts/sprinboot%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>Spring Boot简介 Spring Boot 简化了Spring的难度，提供了各种启动器，简省了繁重的配置，可以快速搭建启动的一站式解决方案
+Spring Boot核心注解 启动类上的@SpringBootApplication注解，包含了三个注解：
+​## Spring Boot 学习笔记
+Spring Boot 简化了Spring的难度，提供了各种启动器，简省了繁重的配置，可以快速搭建启动的一站式解决方案
+Spring Boot核心注解 启动类上的@SpringBootApplication注解，包含了三个注解：
+@SpringBootApplication
+  @SpringBootConfiguration
+ Configuration //配置类    @EnableAutoConfiguration
+  @AutoConfigurationPackage
+ @Import(AutoConfigurationPackages.Registrar.class) //把用到的bean导入到容器    @Import({AutoConfigurationImportSelector.class})
+    @ComponentScan //指定basePackage，容器启动会扫描指定包下的类自动注册到容器
+  @Configuration与@Component的区别   @Configuration
+  @Configuration是ConfigurationClassPostBeanProcessor通过cglib的enhance方法来生成动态代理的类(代理类继承原来的类，自动实现了BeanFactoryAware接口, 并新增一个beanFactory字段)，并设置方法的callback拦截器，当代理类调用时会执行callback拦截器的拦截方法，对bean实例化后注册到BeanFactory
+  其中所有包含@Bean的方法都会被拦截，同一类中的其它@Bean方法调用前会检查是否已经实例化，如果已经实例化就通过 beanFactory.getBean 获取，如果没有，就调用原方法。例如，调用UserInfo实例化时会先获取，如果没有就调用原方法生成bean，这里的bean是同一个
+@Configurationpublic class MyConfiguration {@Beanpublic AccountInfo accountInfo(){return new AccountInfo(100);}@Beanpublic UserInfo userInfo(){ User user = new User(); user.</description>
+    </item>
+    
+  </channel>
+</rss>

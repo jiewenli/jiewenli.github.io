@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  <link rel="prev" href="https://blog.rua.run/posts/spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+  <link rel="next" href="https://blog.rua.run/posts/sprinboot%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+  <link rel="canonical" href="https://blog.rua.run/posts/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           SpringMVC学习笔记 | Note
+       
+  </title>
+  <meta name="title" content="SpringMVC学习笔记 | Note">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.rua.run"
+    },
+    "articleSection" : "posts",
+    "name" : "SpringMVC学习笔记",
+    "headline" : "SpringMVC学习笔记",
+    "description" : "Spring MVC 九⼤组件   HandlerMapping（处理器映射器）\nHandlerMapping 是⽤来查找 Handler 的，也就是处理器，具体的表现形式可以是类，也可以是\n⽅法。⽐如，标注了@RequestMapping的每个⽅法都可以看成是⼀个Handler。Handler负责具\n体实际的请求处理，在请求到达后，HandlerMapping 的作⽤便是找到请求相应的处理器\n  Handler 和 Interceptor.\nHandlerAdapter（处理器适配器）HandlerAdapter 是⼀个适配器。因为 Spring MVC 中 Handler 可以是任意形式的，只要能处理请\n求即可。但是把请求交给 Servlet 的时候，由于 Servlet 的⽅法结构都是\ndoService(HttpServletRequest req,HttpServletResponse resp)形式的，要让固定的 Servlet 处理\n⽅法调⽤ Handler 来进⾏处理，便是 HandlerAdapter 的职责。\n  HandlerExceptionResolver\nHandlerExceptionResolver ⽤于处理 Handler 产⽣的异常情况。它的作⽤是根据异常设置\nModelAndView，之后交给渲染⽅法进⾏渲染，渲染⽅法会将 ModelAndView 渲染成⻚⾯。\n  ViewResolver\nViewResolver即视图解析器，⽤于将String类型的视图名和Locale解析为View类型的视图，只有⼀\n个resolveViewName()⽅法。从⽅法的定义可以看出，Controller层返回的String类型视图名\nviewName 最终会在这⾥被解析成为View。View是⽤来渲染⻚⾯的，也就是说，它会将程序返回\n的参数和数据填⼊模板中，⽣成html⽂件。ViewResolver 在这个过程主要完成两件事情：\nViewResolver 找到渲染所⽤的模板（第⼀件⼤事）和所⽤的技术（第⼆件⼤事，其实也就是找到\n视图的类型，如JSP）并填⼊参数。默认情况下，Spring MVC会⾃动为我们配置⼀个\nInternalResourceViewResolver,是针对 JSP 类型视图的。\n  RequestToViewNameTranslator\nRequestToViewNameTranslator 组件的作⽤是从请求中获取 ViewName.",
+    "inLanguage" : "zh-CN",
+    "author" : "jiewen",
+    "creator" : "jiewen",
+    "publisher": "jiewen",
+    "accountablePerson" : "jiewen",
+    "copyrightHolder" : "jiewen",
+    "copyrightYear" : "2020",
+    "datePublished": "2020-05-18 14:48:03 \x2b0800 CST",
+    "dateModified" : "2020-05-18 14:48:03 \x2b0800 CST",
+    "url" : "https:\/\/blog.rua.run\/posts\/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0\/",
+    "wordCount" : "170",
+    "keywords" : [ "springmvc", "Note"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">SpringMVC学习笔记</h1>
+        <div class="post-meta">
+            Written by <a itemprop="name" href="https://blog.rua.run"
+                rel="author">jiewen</a>
+            with ♥
+            <span class="post-time">
+                on <time datetime=2020-05-18
+                    itemprop="datePublished">2020-05-18</time>
+            </span>
+            in
+            <i class="iconfont icon-folder"></i>
+            <span class="post-category">
+                <a href="https://blog.rua.run/categories/springmvc/"> springmvc </a>
+                
+            </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+
+        
+        
+        
+
+        
+        
+        
+
+        <h2 id="spring-mvc-九组件"><strong>Spring MVC</strong> 九⼤组件</h2>
+<ol>
+<li>
+<p>HandlerMapping（处理器映射器）</p>
+<p>HandlerMapping 是⽤来查找 Handler 的，也就是处理器，具体的表现形式可以是类，也可以是</p>
+<p>⽅法。⽐如，标注了@RequestMapping的每个⽅法都可以看成是⼀个Handler。Handler负责具</p>
+<p>体实际的请求处理，在请求到达后，HandlerMapping 的作⽤便是找到请求相应的处理器</p>
+</li>
+<li>
+<p>Handler 和 Interceptor.</p>
+<p>HandlerAdapter（处理器适配器）HandlerAdapter 是⼀个适配器。因为 Spring MVC 中 Handler 可以是任意形式的，只要能处理请</p>
+<p>求即可。但是把请求交给 Servlet 的时候，由于 Servlet 的⽅法结构都是</p>
+<p>doService(HttpServletRequest req,HttpServletResponse resp)形式的，要让固定的 Servlet 处理</p>
+<p>⽅法调⽤ Handler 来进⾏处理，便是 HandlerAdapter 的职责。</p>
+</li>
+<li>
+<p>HandlerExceptionResolver</p>
+<p>HandlerExceptionResolver ⽤于处理 Handler 产⽣的异常情况。它的作⽤是根据异常设置</p>
+<p>ModelAndView，之后交给渲染⽅法进⾏渲染，渲染⽅法会将 ModelAndView 渲染成⻚⾯。</p>
+</li>
+<li>
+<p>ViewResolver</p>
+<p>ViewResolver即视图解析器，⽤于将String类型的视图名和Locale解析为View类型的视图，只有⼀</p>
+<p>个resolveViewName()⽅法。从⽅法的定义可以看出，Controller层返回的String类型视图名</p>
+<p>viewName 最终会在这⾥被解析成为View。View是⽤来渲染⻚⾯的，也就是说，它会将程序返回</p>
+<p>的参数和数据填⼊模板中，⽣成html⽂件。ViewResolver 在这个过程主要完成两件事情：</p>
+<p>ViewResolver 找到渲染所⽤的模板（第⼀件⼤事）和所⽤的技术（第⼆件⼤事，其实也就是找到</p>
+<p>视图的类型，如JSP）并填⼊参数。默认情况下，Spring MVC会⾃动为我们配置⼀个</p>
+<p>InternalResourceViewResolver,是针对 JSP 类型视图的。</p>
+</li>
+<li>
+<p>RequestToViewNameTranslator</p>
+<p>RequestToViewNameTranslator 组件的作⽤是从请求中获取 ViewName.因为 ViewResolver 根据</p>
+<p>ViewName 查找 View，但有的 Handler 处理完成之后,没有设置 View，也没有设置 ViewName，</p>
+<p>便要通过这个组件从请求中查找 ViewName。</p>
+</li>
+<li>
+<p>LocaleResolver</p>
+<p>ViewResolver 组件的 resolveViewName ⽅法需要两个参数，⼀个是视图名，⼀个是 Locale。</p>
+<p>LocaleResolver ⽤于从请求中解析出 Locale，⽐如中国 Locale 是 zh-CN，⽤来表示⼀个区域。这</p>
+<p>个组件也是 i18n 的基础。</p>
+</li>
+<li>
+<p>ThemeResolver</p>
+<p>ThemeResolver 组件是⽤来解析主题的。主题是样式、图⽚及它们所形成的显示效果的集合。</p>
+<p>Spring MVC 中⼀套主题对应⼀个 properties⽂件，⾥⾯存放着与当前主题相关的所有资源，如图</p>
+<p>⽚、CSS样式等。创建主题⾮常简单，只需准备好资源，然后新建⼀个“主题名.properties”并将资</p>
+<p>源设置进去，放在classpath下，之后便可以在⻚⾯中使⽤了。SpringMVC中与主题相关的类有</p>
+<p>ThemeResolver、ThemeSource和Theme。ThemeResolver负责从请求中解析出主题名，</p>
+<p>ThemeSource根据主题名找到具体的主题，其抽象也就是Theme，可以通过Theme来获取主题和</p>
+<p>具体的资源。</p>
+</li>
+<li>
+<p>MultipartResolver</p>
+<p>MultipartResolver ⽤于上传请求，通过将普通的请求包装成 MultipartHttpServletRequest 来实</p>
+<p>现。MultipartHttpServletRequest 可以通过 getFile() ⽅法 直接获得⽂件。如果上传多个⽂件，还</p>
+<p>可以调⽤ getFileMap()⽅法得到Map&lt;FileName，File&gt;这样的结构，MultipartResolver 的作⽤就</p>
+<p>是封装普通的请求，使其拥有⽂件上传的功能。</p>
+</li>
+<li>
+<p>FlashMapManager</p>
+<p>FlashMap ⽤于重定向时的参数传递，⽐如在处理⽤户订单时候，为了避免重复提交，可以处理完</p>
+<p>post请求之后重定向到⼀个get请求，这个get请求可以⽤来显示订单详情之类的信息。这样做虽然</p>
+<p>可以规避⽤户重新提交订单的问题，但是在这个⻚⾯上要显示订单的信息，这些数据从哪⾥来获得</p>
+<p>呢？因为重定向时么有传递参数这⼀功能的，如果不想把参数写进URL（不推荐），那么就可以通</p>
+<p>过FlashMap来传递。只需要在重定向之前将要传递的数据写⼊请求（可以通过ServletRequestAttributes.getRequest()⽅法获得）的属性OUTPUT_FLASH_MAP_ATTRIBUTE</p>
+<p>中，这样在重定向之后的Handler中Spring就会⾃动将其设置到Model中，在显示订单信息的⻚⾯</p>
+<p>上就可以直接从Model中获取数据。FlashMapManager 就是⽤来管理 FalshMap 的。</p>
+</li>
+</ol>
+<h2 id="modelmodelmap-modelandviewmap">Model、<strong>ModelMap</strong> 、ModelAndView、Map</h2>
+<p>它们的作用相同，都是用于传递控制方法存储数据到展示页面（JSP页面），通过EL表达式或者C标签库的来获	取对对象的key进行取值。</p>
+<p>它们之间的区别：</p>
+<p>　　1. Map、Model、ModelMap不需要我们手动创建，springmvc框架自动创建并作为控制器方法参数传入；而ModelAndView需要手动创建。</p>
+<p>　　2. Model只是用来传输数据的，并不会进行业务的寻址。ModelAndView却是可以进行业务寻址的，就是设置对应的要请求的静态文件，这里的静态文件指的是类似jsp的文件。</p>
+<p><strong>Map</strong> 为原生的储存键值的对象</p>
+<p><strong>Model</strong>有几个方法适合用于储存数据，简化了对Model对象的操作和理解；</p>
+<p><strong>ModelMap</strong> 继承了 LinkedMap ，除了实现了自身的一些方法，同样的继承 LinkedMap 的方法和特性；</p>
+<!-- raw HTML omitted -->
+<p><strong>ModelAndView</strong> 可以在储存数据的同时，可以进行设置返回的逻辑视图，进行控制展示层的跳转。</p>
+<h2 id="监听器过滤器和拦截器">监听器、过滤器和拦截器</h2>
+<p>Servlet：处理Request请求和Response响应</p>
+<p><strong>过滤器（Filter）</strong>：对Request请求起到过滤的作⽤，作⽤在Servlet之前，如果配置为/*可以对所</p>
+<p>有的资源访问（servlet、js/css静态资源等）进⾏过滤处理</p>
+<p><strong>监听器（Listener）</strong>：实现了javax.servlet.ServletContextListener 接⼝的服务器端组件，它随</p>
+<p>Web应⽤的启动⽽启动，只初始化⼀次，然后会⼀直运⾏监视，随Web应⽤的停⽌⽽销毁</p>
+<p>作⽤⼀：做⼀些初始化⼯作，web应⽤中spring容器启动ContextLoaderListener</p>
+<p>作⽤⼆：监听web中的特定事件，⽐如HttpSession,ServletRequest的创建和销毁；变量的创建、</p>
+<p>销毁和修改等。可以在某些动作前后增加处理，实现监控，⽐如统计在线⼈数，利⽤</p>
+<p>HttpSessionLisener等。</p>
+<p><strong>拦截器（Interceptor）</strong>：是SpringMVC、Struts等表现层框架⾃⼰的，不会拦截</p>
+<p>jsp/html/css/image的访问等，只会拦截访问的控制器⽅法（Handler）。</p>
+<p>从配置的⻆度也能够总结发现：serlvet、fifilter、listener是配置在web.xml中的，⽽interceptor是</p>
+<p>配置在表现层框架⾃⼰的配置⽂件中的</p>
+<p>在Handler业务逻辑执⾏之前拦截⼀次</p>
+<p>在Handler逻辑执⾏完毕但未跳转⻚⾯之前拦截⼀次</p>
+<p>在跳转⻚⾯之后拦截⼀次</p>
+<h2 id="controlleradviceexceptionhandler">@ControllerAdvice、@ExceptionHandler</h2>
+<p>ControllerAdvice 就是对Controller切面逻辑织入，具体的切面逻辑和织入方式通过结合其它注解来实现的。</p>
+<ul>
+<li>结合方法型注解@ExceptionHandler，用于捕获Controller中抛出的指定类型的异常，从而达到不同类型的异常区别处理的目的；</li>
+<li>结合方法型注解@InitBinder，用于request中自定义参数解析方式进行注册，从而达到自定义指定格式参数的目的；</li>
+<li>结合方法型注解@ModelAttribute，表示其标注的方法将会在目标Controller方法执行之前执行。</li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+        
+
+        
+        <p class="copyright-item">
+            <span>Link:</span>
+            <a href=https://blog.rua.run/posts/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/>https://blog.rua.run/posts/springmvc%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</span>
+        </p>
+        
+        
+    </div>
+
+
+    <div class="post-tags">
+        
+        <section>
+            <i class="iconfont icon-tag"></i>Tag(s):
+            
+            <span class="tag"><a href="https://blog.rua.run/tags/springmvc/">
+                    #springmvc</a></span>
+            
+        </section>
+        
+        <section>
+            <a href="javascript:window.history.back();">back</a></span> ·
+            <span><a href="https://blog.rua.run">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://blog.rua.run/posts/spring%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="prev" rel="prev" title="Spring学习笔记"><i
+                class="iconfont icon-left"></i>&nbsp;Spring学习笔记</a>
+        
+        
+        <a href="https://blog.rua.run/posts/sprinboot%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="next" rel="next"
+            title="Sprinboot学习笔记">Sprinboot学习笔记&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+        
+        
+    </div>
+    
+<div class="post-toc">
+    <aside class="post-toc-aside">
+        
+        <nav id="TableOfContents">
+  <ol>
+    <li><a href="#spring-mvc-九组件">Spring MVC 九⼤组件</a></li>
+    <li><a href="#modelmodelmap-modelandviewmap">Model、ModelMap 、ModelAndView、Map</a></li>
+    <li><a href="#监听器过滤器和拦截器">监听器、过滤器和拦截器</a></li>
+    <li><a href="#controlleradviceexceptionhandler">@ControllerAdvice、@ExceptionHandler</a></li>
+  </ol>
+</nav>
+    </aside>
+</div>
+
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

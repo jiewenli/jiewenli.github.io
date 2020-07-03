@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  
+  
+  
+  
+  <link rel="prev" href="https://blog.rua.run/posts/sprinboot%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+  
+  <link rel="canonical" href="https://blog.rua.run/posts/tomcat%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           Tomcat学习笔记 | Note
+       
+  </title>
+  <meta name="title" content="Tomcat学习笔记 | Note">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/blog.rua.run"
+    },
+    "articleSection" : "posts",
+    "name" : "Tomcat学习笔记",
+    "headline" : "Tomcat学习笔记",
+    "description" : "Tomcat简介 是什么？ Tomcat服务器 是一个开源的轻量级web应用服务器，用于开发servlet、jsp程序。tomcat将网络协议处理与业务请求处理分离。\n两大组件  Connector 负责Socket通信 Container 负责请求处理  Engine 是Servlet的引擎，可以包含多个Host Host 是一个虚拟主机的容器，可以有多个Context应用 Context 是一个web应用程序，可以有多个Wrapper容器 Wrapper 是Servlet的封装    其它组件 Tomcat 还有其它重要的组件，如安全组件 security、日志组件 logger 、session、mbeans、naming 等其它组件。这些组件共同为 Connector 和 Container 提供必要的服务。\nTomcat Servlet 容器 Catalina Catalina是Tomcat的核心，Tomcat本质就是一个Servlet容器。\nCatalina容器通过加载server.xml完成其它容器的创建和加载，通过一个Server容器来管理整个容器。\nServer通过实现Lifecycle接口，可以统一启动关闭整个容器来管理容器。Server内部可以有多个Service，Service是对多个Connector组件和一个Engine组件的绑定，Connector组件是tomcat连接器的部分，Engine代表整个Servlet引擎，是Servlet容器的封装。\nTomcat 连接器组件 Coyote 连接器包含以下几种组件\n  EndPoint\n 是socket通信的监听接收发送的处理器（TCP\/IP协议处理)\n   Processor\n 是协议处理接口，将接收到的字节流解析并处理成Request、Response对象(HTTP协议处理)\n   ProtocolHandler\n 协议接口，通过EndPoint和Processor实现对具体协议和不同IO模型的处理\n   Adapter\n 适配器，通过适配器来适配不同协议，生成标准的ServletRequest\/ServletResponse交给容器处理\n   Tomcat类加载器 Tomcat作为一个web服务器，除了需要加载自身应用需要的类，还需要加载部署在tomcat的web应用的类，其中web应用相互隔离又共同依赖部分tomcat公共类(Servlet等)，所以tomcat打破了双亲委派机制。",
+    "inLanguage" : "zh-CN",
+    "author" : "jiewen",
+    "creator" : "jiewen",
+    "publisher": "jiewen",
+    "accountablePerson" : "jiewen",
+    "copyrightHolder" : "jiewen",
+    "copyrightYear" : "2020",
+    "datePublished": "2020-06-04 17:04:14 \x2b0800 CST",
+    "dateModified" : "2020-06-04 17:04:14 \x2b0800 CST",
+    "url" : "https:\/\/blog.rua.run\/posts\/tomcat%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0\/",
+    "wordCount" : "56",
+    "keywords" : [ "tomcat", "Note"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://blog.rua.run">Note</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Tomcat学习笔记</h1>
+        <div class="post-meta">
+            Written by <a itemprop="name" href="https://blog.rua.run"
+                rel="author">jiewen</a>
+            with ♥
+            <span class="post-time">
+                on <time datetime=2020-06-04
+                    itemprop="datePublished">2020-06-04</time>
+            </span>
+            in
+            <i class="iconfont icon-folder"></i>
+            <span class="post-category">
+                <a href="https://blog.rua.run/categories/tomcat/"> tomcat </a>
+                
+            </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+        
+        
+
+        
+        
+
+        
+        
+        
+
+        
+        
+        
+
+        <h2 id="tomcat简介">Tomcat简介</h2>
+<h3 id="是什么">是什么？</h3>
+<p>Tomcat服务器 是一个开源的轻量级web应用服务器，用于开发servlet、jsp程序。tomcat将网络协议处理与业务请求处理分离。</p>
+<h4 id="两大组件">两大组件</h4>
+<ul>
+<li>Connector 负责Socket通信</li>
+<li>Container 负责请求处理
+<ul>
+<li>Engine 是Servlet的引擎，可以包含多个Host</li>
+<li>Host 是一个虚拟主机的容器，可以有多个Context应用</li>
+<li>Context 是一个web应用程序，可以有多个Wrapper容器</li>
+<li>Wrapper 是Servlet的封装</li>
+</ul>
+</li>
+</ul>
+<h4 id="其它组件">其它组件</h4>
+<p>Tomcat 还有其它重要的组件，如安全组件 security、日志组件 logger 、session、mbeans、naming 等其它组件。这些组件共同为 Connector 和 Container 提供必要的服务。</p>
+<h2 id="tomcat-servlet-容器-catalina"><strong>Tomcat Servlet</strong> 容器 Catalina</h2>
+<p>Catalina是Tomcat的核心，Tomcat本质就是一个Servlet容器。</p>
+<p>Catalina容器通过加载server.xml完成其它容器的创建和加载，通过一个Server容器来管理整个容器。</p>
+<p>Server通过实现Lifecycle接口，可以统一启动关闭整个容器来管理容器。Server内部可以有多个Service，Service是对多个Connector组件和一个Engine组件的绑定，Connector组件是tomcat连接器的部分，Engine代表整个Servlet引擎，是Servlet容器的封装。</p>
+<h2 id="tomcat-连接器组件-coyote"><strong>Tomcat</strong> 连接器组件 Coyote</h2>
+<p>连接器包含以下几种组件</p>
+<ul>
+<li>
+<p>EndPoint</p>
+<blockquote>
+<p>是socket通信的监听接收发送的处理器（TCP/IP协议处理)</p>
+</blockquote>
+</li>
+<li>
+<p>Processor</p>
+<blockquote>
+<p>是协议处理接口，将接收到的字节流解析并处理成Request、Response对象(HTTP协议处理)</p>
+</blockquote>
+</li>
+<li>
+<p>ProtocolHandler</p>
+<blockquote>
+<p>协议接口，通过EndPoint和Processor实现对具体协议和不同IO模型的处理</p>
+</blockquote>
+</li>
+<li>
+<p>Adapter</p>
+<blockquote>
+<p>适配器，通过适配器来适配不同协议，生成标准的ServletRequest/ServletResponse交给容器处理</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="tomcat类加载器">Tomcat类加载器</h2>
+<p><img src="/images/classloader.png" alt="img"></p>
+<p>Tomcat作为一个web服务器，除了需要加载自身应用需要的类，还需要加载部署在tomcat的web应用的类，其中web应用相互隔离又共同依赖部分tomcat公共类(Servlet等)，所以tomcat打破了双亲委派机制。</p>
+<ul>
+<li>commonLoader：Tomcat最基本的类加载器，加载路径中的class可以被Tomcat容器本身以及各个Webapp访问；</li>
+<li>catalinaLoader：Tomcat容器私有的类加载器，加载路径中的class对于Webapp不可见；</li>
+<li>sharedLoader：各个Webapp共享的类加载器，加载路径中的class对于所有Webapp可见，但是对于Tomcat容器不可见；</li>
+<li>WebappClassLoader：各个Webapp私有的类加载器，加载路径中的class只对当前Webapp可见；</li>
+</ul>
+<p>虽然tomcat打破了双亲委派机制，还是要去顶层请求classLoader来加载类（比如String、HashMap等），不会有恶意破坏的风险。</p>
+<p>由于多个web应用可能依赖相同类库的不同版本，各个web应用需要相互隔离，tomcat为每个web应用单独使用一个类加载器，做到了隔离的作用。如果各个web应用依赖的类版本相同，这时也需要使用sharedLoader类加载器来加载，避免同一个类在jvm多个类实例造成浪费</p>
+<p>同样，tomcat也需要与web应用隔离，并且tomcat作为程序入口，首先需要从tomcat的Catalina类加载器开始加载。</p>
+
+    </div>
+
+    <div class="post-copyright">
+        
+
+        
+        <p class="copyright-item">
+            <span>Link:</span>
+            <a href=https://blog.rua.run/posts/tomcat%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/>https://blog.rua.run/posts/tomcat%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</span>
+        </p>
+        
+        
+    </div>
+
+
+    <div class="post-tags">
+        
+        <section>
+            <i class="iconfont icon-tag"></i>Tag(s):
+            
+            <span class="tag"><a href="https://blog.rua.run/tags/tomcat/">
+                    #tomcat</a></span>
+            
+        </section>
+        
+        <section>
+            <a href="javascript:window.history.back();">back</a></span> ·
+            <span><a href="https://blog.rua.run">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://blog.rua.run/posts/sprinboot%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="prev" rel="prev" title="Sprinboot学习笔记"><i
+                class="iconfont icon-left"></i>&nbsp;Sprinboot学习笔记</a>
+        
+        
+    </div>
+
+    <div class="post-comment">
+        
+        
+        
+    </div>
+    
+<div class="post-toc">
+    <aside class="post-toc-aside">
+        
+        <nav id="TableOfContents">
+  <ol>
+    <li><a href="#tomcat简介">Tomcat简介</a>
+      <ol>
+        <li><a href="#是什么">是什么？</a></li>
+      </ol>
+    </li>
+    <li><a href="#tomcat-servlet-容器-catalina">Tomcat Servlet 容器 Catalina</a></li>
+    <li><a href="#tomcat-连接器组件-coyote">Tomcat 连接器组件 Coyote</a></li>
+    <li><a href="#tomcat类加载器">Tomcat类加载器</a></li>
+  </ol>
+</nav>
+    </aside>
+</div>
+
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>
