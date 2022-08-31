@@ -1,0 +1,31 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>All Posts - blog</title>
+        <link>https://blog.rua.run/posts/</link>
+        <description>All Posts | blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 31 Aug 2022 22:39:29 &#43;0800</lastBuildDate><atom:link href="https://blog.rua.run/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>java_concurrent</title>
+    <link>https://blog.rua.run/java_concurrent/</link>
+    <pubDate>Wed, 31 Aug 2022 22:39:29 &#43;0800</pubDate>
+    <author>javen</author>
+    <guid>https://blog.rua.run/java_concurrent/</guid>
+    <description><![CDATA[JAVA并发 基础知识 并发编程的优缺点 为什么要用到并发（优点） 充分利用多核CPU的运算能力 方便业务拆分 并发编程的缺点 频繁的上下文切换 线程安全（]]></description>
+</item>
+<item>
+    <title>动态日志级别</title>
+    <link>https://blog.rua.run/dynamic-log-level/</link>
+    <pubDate>Wed, 24 Aug 2022 22:29:22 &#43;0800</pubDate>
+    <author>javen</author>
+    <guid>https://blog.rua.run/dynamic-log-level/</guid>
+    <description><![CDATA[背景 随着业务的快速发展，业务复杂度不断增加，线上系统环境有任何细小波动，对整个业务都产生巨大的影响，甚至造成灾难性的雪崩效应，开发人员对此必]]></description>
+</item>
+<item>
+    <title>DDD领域驱动设计</title>
+    <link>https://blog.rua.run/ddd/</link>
+    <pubDate>Wed, 24 Aug 2022 16:31:46 &#43;0800</pubDate>
+    <author>javen</author>
+    <guid>https://blog.rua.run/ddd/</guid>
+    <description><![CDATA[前言 至少 30 年以前，一些软件设计人员就已经意识到领域建模和设计的重要性，并形成一种思潮，Eric Evans 将其定义为领域驱动设计（Domain-Dri]]></description>
+</item>
+</channel>
+</rss>

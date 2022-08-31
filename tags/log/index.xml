@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>log - Tag - blog</title>
+        <link>https://blog.rua.run/tags/log/</link>
+        <description>log - Tag - blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 24 Aug 2022 22:29:22 &#43;0800</lastBuildDate><atom:link href="https://blog.rua.run/tags/log/" rel="self" type="application/rss+xml" /><item>
+    <title>动态日志级别</title>
+    <link>https://blog.rua.run/dynamic-log-level/</link>
+    <pubDate>Wed, 24 Aug 2022 22:29:22 &#43;0800</pubDate>
+    <author>javen</author>
+    <guid>https://blog.rua.run/dynamic-log-level/</guid>
+    <description><![CDATA[背景 随着业务的快速发展，业务复杂度不断增加，线上系统环境有任何细小波动，对整个业务都产生巨大的影响，甚至造成灾难性的雪崩效应，开发人员对此必]]></description>
+</item>
+</channel>
+</rss>

@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>concurrent - Tag - blog</title>
+        <link>https://blog.rua.run/tags/concurrent/</link>
+        <description>concurrent - Tag - blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 31 Aug 2022 22:39:29 &#43;0800</lastBuildDate><atom:link href="https://blog.rua.run/tags/concurrent/" rel="self" type="application/rss+xml" /><item>
+    <title>java_concurrent</title>
+    <link>https://blog.rua.run/java_concurrent/</link>
+    <pubDate>Wed, 31 Aug 2022 22:39:29 &#43;0800</pubDate>
+    <author>javen</author>
+    <guid>https://blog.rua.run/java_concurrent/</guid>
+    <description><![CDATA[JAVA并发 基础知识 并发编程的优缺点 为什么要用到并发（优点） 充分利用多核CPU的运算能力 方便业务拆分 并发编程的缺点 频繁的上下文切换 线程安全（]]></description>
+</item>
+</channel>
+</rss>

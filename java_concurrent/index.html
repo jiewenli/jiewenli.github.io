@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>java_concurrent - blog</title><meta name="Description" content="网站描述, 用于 RSS, SEO, Open Graph 和 Twitter Cards"><meta property="og:title" content="java_concurrent" />
+<meta property="og:description" content="JAVA并发 基础知识 并发编程的优缺点 为什么要用到并发（优点） 充分利用多核CPU的运算能力 方便业务拆分 并发编程的缺点 频繁的上下文切换 线程安全（" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.rua.run/java_concurrent/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-08-31T22:39:29+08:00" />
+<meta property="article:modified_time" content="2022-08-31T22:39:29+08:00" /><meta property="og:site_name" content="网站标题, 用于 Open Graph 和 Twitter Cards" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="java_concurrent"/>
+<meta name="twitter:description" content="JAVA并发 基础知识 并发编程的优缺点 为什么要用到并发（优点） 充分利用多核CPU的运算能力 方便业务拆分 并发编程的缺点 频繁的上下文切换 线程安全（"/>
+<meta name="application-name" content="blog">
+<meta name="apple-mobile-web-app-title" content="blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.rua.run/java_concurrent/" /><link rel="prev" href="https://blog.rua.run/dynamic-log-level/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "java_concurrent",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.rua.run\/java_concurrent\/"
+        },"genre": "posts","keywords": "java, concurrent","wordcount":  8875 ,
+        "url": "https:\/\/blog.rua.run\/java_concurrent\/","datePublished": "2022-08-31T22:39:29+08:00","dateModified": "2022-08-31T22:39:29+08:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "javen"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="blog">虾扯</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="blog">虾扯</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">java_concurrent</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>javen</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-08-31">2022-08-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;8875 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;18 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#基础知识">基础知识</a></li>
+    <li><a href="#并发理论jmm">并发理论（JMM）</a></li>
+    <li><a href="#并发关键字">并发关键字</a></li>
+    <li><a href="#lock体系">Lock体系</a></li>
+    <li><a href="#并发容器">并发容器</a></li>
+    <li><a href="#线程池executor体系">线程池（Executor体系）</a></li>
+    <li><a href="#原子操作类">原子操作类</a></li>
+    <li><a href="#并发工具">并发工具</a></li>
+    <li><a href="#并发实践">并发实践</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="java并发">JAVA并发</h1>
+<ul>
+<li>
+<h2 id="基础知识">基础知识</h2>
+<ol>
+<li>并发编程的优缺点
+<ol>
+<li>为什么要用到并发（优点）
+<ul>
+<li>充分利用多核CPU的运算能力</li>
+<li>方便业务拆分</li>
+</ul>
+</li>
+<li>并发编程的缺点
+<ul>
+<li>频繁的上下文切换</li>
+<li>线程安全（常见的避免死锁的方式）</li>
+</ul>
+</li>
+<li>易混淆的概念
+<ul>
+<li>同步 VS 异步</li>
+<li>并发 VS 并行</li>
+<li>阻塞 VS 非阻塞</li>
+<li>临界区资源</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>线程的状态和基本操作
+<ol>
+<li>如何新建线程
+<ul>
+<li>继承Thread类</li>
+<li>实现Runnable接口</li>
+<li>实现Callable接口</li>
+<li>几种新建线程方式的比较</li>
+</ul>
+</li>
+<li>线程状态的转换
+<ul>
+<li>NEW</li>
+<li>RUNNABLE</li>
+<li>WAITING</li>
+<li>TIMED_WAITING</li>
+<li>TERMINATED</li>
+<li>BLOCKED</li>
+</ul>
+</li>
+<li>线程的基本操作
+<ul>
+<li>interrupt
+<ul>
+<li>抛出InterruptedException异常时，会清除中断标志位</li>
+<li>interrupt(), interrupted(), isInterrupt()</li>
+</ul>
+</li>
+<li>sleep
+<ul>
+<li>sleep与wait的区别</li>
+</ul>
+</li>
+<li>join</li>
+<li>yield
+<ul>
+<li>yield仅仅只会把时间片让给同优先级的线程，而sleep没有这个要求</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>守护线程Daemon</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<h2 id="并发理论jmm">并发理论（JMM）</h2>
+<ol>
+<li>JMM内存模型
+<ol>
+<li>哪些是共享数据
+<ul>
+<li>实例域</li>
+<li>静态域</li>
+<li>数组</li>
+</ul>
+</li>
+<li>抽象结构
+<ul>
+<li>线程将数据拷贝到工作内存，再刷新到主存。</li>
+<li>各个线程通过主存中的数据来完成隐式通信</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>重排序
+<ol>
+<li>什么是重排序
+<ul>
+<li>为了提高执行性能，编译器和处理器会对指令进行重排序</li>
+<li>针对编译器重排序，编译器重排序规则会禁止一些特定类型的编译器重排序</li>
+<li>针对处理器重排序，编译器会在生成指令的时候插入内存屏障来禁止特定类型的处理器重排序</li>
+</ul>
+</li>
+<li>数据依赖性</li>
+<li>as-if-serial
+<ul>
+<li>遵守as-if-serial语义的编译器，runtime和处理器共同为编写单线程程序的程序员创建了一个幻觉：单线程程序是按程序的顺序来执行的</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>happens-before规则
+<ol>
+<li>定义
+<ul>
+<li>如果A happens-before B，则A操作的结果对操作B可见，且A操作在操作B之前执行</li>
+<li>如果指令重排序之后的结果，与按照happens-before关系执行的结果一致，
+则指令可以重排序</li>
+</ul>
+</li>
+<li>理解
+<ul>
+<li>站在程序员角度：为编程人员提供了一个类似强内存的内存结构，方便编程</li>
+<li>站在编译器和处理器厂商：在不影响正确结果的前提下，可以让编译器
+和处理器厂商尽情优化</li>
+</ul>
+</li>
+<li>具体规则
+<ul>
+<li>程序顺序规则</li>
+<li>volatile变量规则</li>
+<li>监视器锁规则</li>
+<li>传递性</li>
+<li>start规则</li>
+<li>join规则</li>
+<li>线程中断规则</li>
+<li>对象finnalize规则</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<h2 id="并发关键字">并发关键字</h2>
+<ol>
+<li>synchronized
+<ol>
+<li>如何使用？
+实例方法（锁的是实例对象）
+静态方法（锁的是类对象）
+代码块根据配置，锁的是实例对象也可以是类对象</li>
+<li>moniter机制
+字节码中会添加monitorenter和monitorexit指令
+锁的重入性：同一个锁程，不需要再次申请获取锁</li>
+<li>synchronized的happens-before关系</li>
+<li>synchronized的内存语义
+共享变量会刷新到主存中，线程每次会从主存中
+读取最新的值到自身的工作内存中</li>
+<li>锁优化
+<ul>
+<li>锁状态
+<ul>
+<li>无锁状态</li>
+<li>偏向锁</li>
+<li>轻量级锁</li>
+<li>重量级锁</li>
+</ul>
+</li>
+<li>CAS操作
+<ul>
+<li>是一种乐观锁策略</li>
+<li>利用现代处理器的CMPXCHG</li>
+<li>存在ABA的问题；自旋时间可能过长的问题</li>
+</ul>
+</li>
+<li>JAVA对象头
+<ul>
+<li>对象的hashcode</li>
+<li>对象的分代年龄</li>
+<li>是否是偏向锁的标志位</li>
+<li>锁标志位</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>锁升级策略
+<ul>
+<li>轻量级锁
+<ul>
+<li>加锁：在对象头和栈帧的锁记录中，添加自身的线程ID</li>
+<li>锁撤销：在全局安全点上进行</li>
+</ul>
+</li>
+<li>轻量级锁
+<ul>
+<li>加锁：Displace mark word，对象头mark word通过CAS指向栈中锁记录</li>
+<li>锁撤销：如果CAS替换回对象头失败，则升级成重量级锁</li>
+</ul>
+</li>
+<li>重量级锁</li>
+<li>各种锁的比较</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>volatile
+<ol>
+<li>实现原理
+<ul>
+<li>写volatile变量在编译时添加Lock指令</li>
+<li>缓存一致性：每个处理器会通过总线嗅探出自己的工作内存中数据是否发生变化</li>
+</ul>
+</li>
+<li>happens-before关系的推导</li>
+<li>内存语义
+<ul>
+<li>写volatile变量会重新刷新到主存中，其他线程读volatile变量
+会重新从主存中读取最新值</li>
+</ul>
+</li>
+<li>内存语义的实现
+<ul>
+<li>通过在特定位置处插入内存屏障来防止重排序</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>final
+<ol>
+<li>如何使用
+<ul>
+<li>变量</li>
+<li>基本类型
+<ul>
+<li>类变量（static变量）：只能在声明时赋值或者</li>
+<li>在静态代码块中赋值</li>
+<li>实例变量：声明时赋值，构造器以及非静态代码块中赋值</li>
+<li>局部变量：有且仅有一次赋值机会</li>
+</ul>
+</li>
+<li>引用类型
+<ul>
+<li>final修饰的引用类型只保证引用的对象地址不变，其对象
+的属性是可以改变的
+方法</li>
+<li>被final修饰的方法不能被子类重写，但是可以被重载
+类</li>
+<li>被final修饰的类，不能被子类继承</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>final的重排序规则
+<ul>
+<li>final域为基本类型</li>
+<li>禁止对final于的写重排序到构造函数之外</li>
+<li>禁止读对象的引用和读该对象包含的final域重排序</li>
+<li>final域为引用类型</li>
+<li>对一个final修饰的对象的成员域的写入，与随后在构造函数之外</li>
+<li>把这个被构造的对象的引用赋给一个引用变量，这两个操作是不能被重排序的</li>
+</ul>
+</li>
+<li>final实现原理
+<ul>
+<li>插入StoreStore和LoadLoad内存屏障</li>
+</ul>
+</li>
+<li>finla引用不能从构造函数函数中“溢出”(this逃逸)</li>
+</ol>
+</li>
+<li>三大性质
+<ul>
+<li>原子性
+<ul>
+<li>synchronzied</li>
+</ul>
+</li>
+<li>可见性
+<ul>
+<li>synchronized</li>
+<li>volatile</li>
+</ul>
+</li>
+<li>有序性
+<ul>
+<li>synchronized</li>
+<li>volatile</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<h2 id="lock体系">Lock体系</h2>
+<ol>
+<li>Lock与synchronized的比较
+Lock提供了基于API的可操作性，提供能可响应中断式
+获取锁，超时获取锁以及非阻塞式获取锁的特性
+synchronized执行完同步块以及遇到异常会自动释放锁，
+而Lock要显示的调用unlock方法释放锁</li>
+<li>AQS
+<ol>
+<li>设计意图（模板方法设计模式）
+AQS提供给同步组件实现者，为其屏蔽了同步状态的管理，线程排队等底层操作
+实现者只需要通过AQS提供的模板方法实现同步组件的语义即可
+lock（同步组件）是面向使用者的，定义了接口，
+隐藏了实现细节</li>
+<li>如何使用AQS实现自定义同步组件
+重写protected方法，告诉AQS如何判断当前
+同步状态获取是否成功或者失败
+同步组件调用AQS的模板方法，实现同步语义。而提供的模板方法
+又会调用被重写的方法
+实现自定义同步组件时，推荐采用继承AQS的静态内部类</li>
+<li>可重写的方法</li>
+<li>AQS提供的模板方法</li>
+</ol>
+</li>
+<li>AQS源码解析
+<ol>
+<li>AQS同步队列的数据结构
+<ul>
+<li>带头结点的双向链表实现的队列</li>
+</ul>
+</li>
+<li>独占式锁
+<ul>
+<li>同步状态获取成功则退出；失败则通过addWaiter方法将当前线程</li>
+<li>封装成节点加入同步队列，acquireQueued方法使得当前线程等待获取同步状态</li>
+<li>如果获取同步状态并且是同步队列中的头结点，则表明获取锁成功，
+并唤醒后继结点</li>
+<li>可响应中断式获取锁以及超时获取锁特性的实现原理</li>
+</ul>
+</li>
+<li>共享式锁
+<ul>
+<li>锁获取原理</li>
+<li>锁释放原理</li>
+<li>可响应中断式获取锁以及可超时获取锁特性的实现原理</li>
+</ul>
+</li>
+<li>ReentrantLock
+<ol>
+<li>重入锁的实现原理</li>
+<li>公平锁的实现原理</li>
+<li>非公平锁的实现原理</li>
+<li>公平锁和非公平锁的比较</li>
+</ol>
+</li>
+<li>ReentrantReadWriteLock
+<ol>
+<li>如何表示读写状态的
+低16位用来表示写状态，高16位用来表示读状态</li>
+<li>WriteLock的获取和释放
+当ReadLock已经被其他线程获取或者WriteLock被其他线程获取，当前线程
+获取WriteLock失败；否则获取成功。支持重入性
+WriteLock释放时将写状态通过CAS操作减一</li>
+<li>ReadLock的获取和释放
+当WriteLock已经被其他线程获取的话，ReadLock获取失败；否则获取成功。支持重入性
+通过CAS操作将读状态减一</li>
+<li>锁降级策略
+按照WriteLock.lock()&ndash;&gt;ReadLock.lock()&ndash;&gt;WriteLock.unlock()的顺序，WriteLock会降级为ReadLock</li>
+<li>生成Condition等待队列
+WriteLock可以通过newCondition方法生成Condition等待队列，
+而ReadLock无法生成Conditon等待队列</li>
+<li>应用场景
+适用于读多写少的应用场景，比如缓存设计上</li>
+</ol>
+</li>
+<li>Condition机制
+<ol>
+<li>与Object的wait/notify机制相比
+具有的特性
+Condition能够支持不响应中断，而Object不支持
+Lock能够支持多个Condition等待队列，而Object只能支持一个
+Condition能够支持设置超时时间的await，而Object不能</li>
+<li>与Object的wait/notify相对应的方法
+针对Object的wait方法：await, awaitNanos,&hellip;
+针对Object的notify/notifyAll方法：signal，signalAll方法</li>
+<li>底层数据结构
+复用AQS的Node类，由不带头结点的链表实现的队列</li>
+<li>awiat实现原理
+将调用await方法的线程封装成Node，尾插入到同步队列中，并通过LockSupport.park方法
+将当前线程置于WAITING状态，直至其他线程通过signal/signalAll方法将其移入到同步队列中，
+使其有机会在同步队列中通过自旋获取到Lock，从而当前线程才能从await方法处退出</li>
+<li>signal/signalAll实现原理
+将等待队列的队头结点移入到同步队列中</li>
+<li>await和signal/signalAll的结合使用</li>
+</ol>
+</li>
+<li>LockSupport
+<ol>
+<li>主要功能
+可阻塞线程以及唤醒线程，功能实现依赖于Unsafe类</li>
+<li>与synchronized阻塞唤醒相比具有的特色
+LockSupport通过LockSupport.unpark(thread)可以指定
+哪个线程被唤醒，而synchronized不能</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<h2 id="并发容器">并发容器</h2>
+<ol>
+<li>concurrentHashMap
+<ol>
+<li>关键属性
+<ul>
+<li>table：元素为Node类的哈希桶数组</li>
+<li>nextTable：扩容时的新数组</li>
+<li>sizeCtl：控制数组的大小</li>
+<li>Unsafe u：提供对哈希桶数组元素的CAS操作</li>
+</ul>
+</li>
+<li>重要内部类
+<ul>
+<li>Node：实现Map.entry接口，存放key，value</li>
+<li>TreeNode：继承Node，会被封装成TreeBin</li>
+<li>TreeBin：进一步封装TreeNode，链表过长时转换成红黑树时使用</li>
+<li>ForwardingNode：扩容时出现的特殊结点</li>
+</ul>
+</li>
+<li>涉及到的CAS操作
+<ul>
+<li>tabAt：查询哈希桶数组的元素</li>
+<li>casTabAt：设置哈希桶数组中索引为i的元素</li>
+<li>setTabAt：设置哈希桶数组中索引为i的元素</li>
+</ul>
+</li>
+<li>构造方法
+<ul>
+<li>数组长度总是会保证为2的幂次方</li>
+</ul>
+</li>
+<li>put执行流程
+<ol>
+<li>如果当前数组还未初始化，先进行初始化</li>
+<li>spread方法重哈希（高16位和低16位异或操作），将哈希值与数组长度与运算，确定待插入结点的索引为i</li>
+<li>当前哈希桶中i处为null，直接插入</li>
+<li>i处结点不为null的话并且结点hash&gt;0，说明i处为链表头结点。遍历链表，遇到与key相同的结点则覆盖其value，
+如果遍历完没有找到，则尾插入新结点</li>
+<li>i处结点不为null的话并且结点状态为MOVED，则说明在扩容，帮助扩容</li>
+<li>i处结点不为null的话并且结点位TreeBin，则使用红黑树的方式插入结点</li>
+<li>插入新结点后，检查链表长度是否大于8，若大于，则转换成红黑树</li>
+<li>检测数组长度，若超过临界值，则扩容</li>
+</ol>
+</li>
+<li>get执行流程</li>
+<li>扩容机制</li>
+<li>用于统计size的方法的执行流程</li>
+<li>1.8版本的ConcurrentHashMap与之前版本的比较
+<ul>
+<li>减小锁粒度</li>
+<li>采用了synchronized而不是lock，大量使用CAS操作</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>CopyOnWriteArrayList
+<ol>
+<li>实现原理
+<ul>
+<li>利用了读写分离的思想；当写线程写入数据的时候会复制新建一个新容器，当数据更新完成后，再将旧容器引用指向新容器。读线程感知数据更新是延时的，也就是说COW是牺牲了数据实时性而保证数据最终一致性</li>
+<li>由于写线程写数据是在新容器写入的，因此读线程不会被阻塞</li>
+</ul>
+</li>
+<li>COW和ReentrantReadWriteLock的区别
+<ul>
+<li>相同点
+<ol>
+<li>两者都采用了读写分离的思想，并且读和
+读线程之间都不会被阻塞</li>
+</ol>
+</li>
+<li>不同点
+<ul>
+<li>当写线程在写数据时，ReadWriteLock会阻塞读线程，而
+由于COW采用了延时更新的策略，COW并不会阻塞读线程</li>
+<li>ReadWriteLock保证了数据实时性而COW保证数据最终一致性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应用场景
+<ul>
+<li>适用于读多写少的场景，比如系统的黑名单，白名单设置</li>
+</ul>
+</li>
+<li>为什么具有弱一致性
+<ul>
+<li>COW的实现是采用数组，而数组的引用是volatile修饰，但是数组的元素并不是
+volatile的。因此数据更新只有当volatile引用指向新数组时才会生效</li>
+</ul>
+</li>
+<li>COW的缺点
+<ul>
+<li>由于在写数据时，会复制，因此可能会出现内存使用瞬间增加，
+导致minor GC和major GC</li>
+<li>只具有数据最终一致性，对数据实时性要求高的场景不合适</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>ThreadLocal
+<ol>
+<li>实现思想
+采用“空间换时间的”思想，每个线程拥有变量副本，达到
+隔离线程的目的，线程间不受影响解决线程安全的问题
+操作系统</li>
+<li>set方法原理
+数据存放在由当前线程Thread维护的ThreadLocalMap中，数据结构为
+当前ThreadLocal实例为key，值为value的键值对</li>
+<li>get方法原理
+以当前ThreadLocal为键，从当前线程Thread维护的ThreadLocalMap中获取value</li>
+<li>remove方法原理
+从当前线程Thread维护的ThreadLocalMap中删除以当前ThreadLocal实例为键的键值对</li>
+<li>ThreadLocalMap
+<ul>
+<li>底层数据结构
+键为ThreadLocal实例，值为value的Entry数组
+数组大小为2的幂次方
+键ThreadLocal为弱引用</li>
+<li>set方法原理
+<ol>
+<li>计算ThreadLocal的hashcode
+总是加上0x61c88647，这是“Fibonacci Hashing”</li>
+<li>计算待插入的索引为i
+采用与运算</li>
+<li>如何解决hash冲突
+<ul>
+<li>当索引为i处有Entry的话（hash冲突），就采用线性探测，进行环形搜素</li>
+</ul>
+</li>
+<li>加载因子
+<ul>
+<li>ThreadLocalMap初始大小为16，加载因子为2/3</li>
+</ul>
+</li>
+<li>扩容resize
+<ul>
+<li>容量为原数组大小的两倍</li>
+<li>getEntry方法原理
+<ul>
+<li>根据ThreadLocal的hashcode进行定位，如果所定位的Entry的key与所查找的key相同则直接返回，否则，环形向后继续探测。</li>
+</ul>
+</li>
+<li>remove原理
+<ul>
+<li>先找到对应的entry，然后让它的Key为null，之后再对其进行清理</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ThreadLocal内存泄漏
+<ul>
+<li>造成内存泄露的原因
+<ul>
+<li>由于ThreadLocal在Entry中是弱引用，当外部ThreadLocal实例被置为null后，根据可达性分析，堆中ThreadLocal不可达，会被GC掉，因此就存在key为null的entry。无法通过key为null去访问entry，因此，就会存在threadRef-&gt;currentThread-&gt;threadLocalMap-&gt;entry-&gt;valueRef-&gt;valueMemory引用链造成valueMemory不会被GC掉，造成内存泄漏</li>
+</ul>
+</li>
+<li>怎样来解决内存泄漏
+<ul>
+<li>关键方法cleanSomeSlots，expungeStaleEntry，replaceStaleEntry</li>
+<li>在ThreadLocal的set，getEntry以及remove方法中都利用以上三个关键方法对潜在的内存泄漏进行处理</li>
+</ul>
+</li>
+<li>为什么要使用弱引用
+<ul>
+<li>如果使用强引用的话，即使显示对ThreadLocal的实例置为null的话，由于Thread，ThreadLocal以及
+ThreadLocalMap引用链关系，ThreadLocal也不会被GC掉，反而会程序员带来困扰；</li>
+<li>使用弱引用，尽管存在ThreadLocal内存泄漏的危险，但实际上已经对其进行了处理</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ThreadLocal的最佳实践
+<ul>
+<li>使用完ThreadLocal后要remove掉</li>
+</ul>
+</li>
+<li>应用场景
+<ul>
+<li>hibernate管理seesion，每个线程维护其自身的session，彼此不干扰</li>
+<li>用于解决对象不能被多个线程共享的问题</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>BlockingQueue
+<ol>
+<li>BlockingQueue的基本操作</li>
+<li>常用的BlockingQueue
+<ul>
+<li>ArrayBlockingQueue：由数组实现的有界阻塞队列</li>
+<li>LinkedBlockingQueue：由链表实现的有界阻塞队列，可指定长度，如果没有指定则为Integer.MAX_VALUE</li>
+<li>PriorityBlockingQueue：支持优先级的无界阻塞队列</li>
+<li>SynchronousQueue：不存储任何元素阻塞队列</li>
+<li>LinkedTransferQueue：由链表实现的无界阻塞队列</li>
+<li>LinkedBlockingDeque：由链表实现的无界阻塞队列</li>
+<li>DelayQueue：存在实现了Delayed接口的数据的无界阻塞队列</li>
+</ul>
+</li>
+<li>ArrayBlockingQueue与LinkedBlockingQueue实现原理
+<ul>
+<li>会有notFull和notEmpty两个等待队列，分别存放
+被阻塞的插入数据线程以及被阻塞的消费数据的线程</li>
+<li>ArrayBlockingQueue只有一个lock，而LinkedBlockingQueue有两个lock，因此LinkedBlockingQueue的并发度更高，吞吐量更大</li>
+<li>通过put和take方法了解生产者-消费者的正确写法</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>ConcurrentLinkedQueue
+<ol>
+<li>实现原理
+主要采用CAS操作以保证线程安全，并且采用了延时更新的策略，提高吞吐量</li>
+<li>数据结构
+由Node构成的链式队列</li>
+<li>核心方法
+offer方法实现原理
+poll方法实现原理</li>
+<li>HOPS延迟更新的设计意图
+尽可能的减少CAS操作，以提升吞吐量和执行效率</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<h2 id="线程池executor体系">线程池（Executor体系）</h2>
+<ol>
+<li>ThreadPoolExecutor
+<ol>
+<li>为什么要使用线程池
+<ul>
+<li>降低资源损耗</li>
+<li>提升系统响应速度</li>
+<li>提高线程的可管理性</li>
+</ul>
+</li>
+<li>执行流程
+<ul>
+<li>核心线程corePool，阻塞队列workQueue以及最大线程池maxPool三级缓存的工作方式</li>
+</ul>
+</li>
+<li>构造器各个参数的意义
+<ul>
+<li>coolPoolSize：核心线程池的大小</li>
+<li>maximumPoolSize：线程池最大容量</li>
+<li>keepAliveTime：空闲线程可存活时间</li>
+<li>unit：keepAliveTime的时间单位</li>
+<li>workQueue：存放任务的阻塞队列</li>
+<li>threadFactory：生产线程的工厂类</li>
+<li>handler：饱和丢弃策略。共四种：
+<ul>
+<li>AbortPolicy，</li>
+<li>CallerRunsPolicy，</li>
+<li>DiscardPolicy，</li>
+<li>DiscardOldestPolicy</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如何关闭线程池
+<ul>
+<li>shutdown：正在执行任务的线程，将任务执行完。空闲线程以中断的方式关闭</li>
+<li>shutdownNow：停止所有线程，包括正在执行任务的线程。返回未执行的任务列表</li>
+<li>showdown将线程池状态设置为SHUTDOWN，而shutdownNow将线程池状态设置为STOP</li>
+<li>isTerminated来检查线程池是否已经关闭</li>
+</ul>
+</li>
+<li>如何配置线程池
+<ul>
+<li>CPU密集型：Ncpu+1</li>
+<li>IO密集型：2Ncpu</li>
+<li>任务按照IO密集型和CPU密集型进行拆分</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>ScheduledThreadPoolExecutor
+<ol>
+<li>UML（类结构）
+继承了ThreadPoolExecutor，并实现了ScheduledExecutorService</li>
+<li>常用方法
+<ul>
+<li>可 延时执行任务：schedule(&hellip;..)</li>
+<li>可周期执行任务：scheduledAtFixedRate(&hellip;)和scheduledWithFixedDelay</li>
+<li>scheduledAtFixedRate和scheduledWithFixedDelay的区别：&hellip;AtFixedRate不要求任务结束了才开始统计延时时间，而&hellip;.WithFixedDelay要求从任务结束开始统计延时时间</li>
+</ul>
+</li>
+<li>ScheduledFutureTask
+<ul>
+<li>可周期执行的异步任务，每一次执行完后会重新设置任务下一次执行的任务，
+并且会添加到阻塞队列中</li>
+</ul>
+</li>
+<li>DelayedWorkQueue
+<ul>
+<li>按优先级排序的有界阻塞队列，底层数据结构是堆</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>FutureTask
+<ol>
+<li>FutureTask的几种状态
+未启动（还未执行run方法），已启动(已执行run方法），已结束（正常结束，被取消，出现异常）</li>
+<li>get()
+未启动和已启动状态，get方法会阻塞当前线程直到异步任务执行结束</li>
+<li>cancel()
+未启动状态时，调用cancel方法后该异步任务永远不会再执行
+已启动状态，调用cancel方法后根据参数是否中断当前执行任务的线程
+已结束状态，调用cancel方法时会返回false</li>
+<li>应用场景
+当一个线程需要等到另一个任务执行结束后才能继续进行时，可以使用futureTask</li>
+<li>实现了Runnable接口
+futureTask同样可以交由executor执行，获取直接调用run方法执行</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<h2 id="原子操作类">原子操作类</h2>
+<ol>
+<li>实现原理
+<ul>
+<li>借住与Unsafe类的CAS操作，达到并发安全的目的</li>
+</ul>
+</li>
+<li>原子更新基本类型
+<ul>
+<li>AtomicInteger， AtomicLong，AtomicBoolean</li>
+</ul>
+</li>
+<li>原子更新数组类型
+<ul>
+<li>AtomicIntegerArray，AtomicLongArray，AtomicReferenceArray</li>
+</ul>
+</li>
+<li>原子更新引用类型
+<ul>
+<li>AtomicReference，AtomicReferenceFieldUpdater，AtomicMarkableReference</li>
+</ul>
+</li>
+<li>原子更新字段类型
+<ul>
+<li>AtomicIntegerFieldUpdater，AtomicLongUpdater，AtomicStampedReference</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<h2 id="并发工具">并发工具</h2>
+<ol>
+<li>倒计时器CountDownLatch
+当CountDownLatch维护的计数器减至为0的时候，调用await方法的线程
+才会继续往下执行，否则会阻塞等待
+适用于一个线程需要等待其他多个线程执行结果的应用场景
+操作系统</li>
+<li>循环栅栏CyclicBarrier
+当一组线程都达到了“临界点”时，所有的线程才能继续往前执行，否则
+阻塞等待</li>
+<li>CountDownLatch和CyclicBarrier的比较
+<ol>
+<li>CyclicBarrier能够复用，而CountDownLatch维护的倒计数器不能复用</li>
+<li>CyclicBarrier会在await处阻塞等待，而CountDownLatch在await出不会阻塞等待</li>
+<li>CyclicBarrier提供了例如isBroken，getNumerWaiting等方法能够
+查询当前状态，而CountDownLatch提供的方法较少</li>
+</ol>
+</li>
+<li>资源访问控制Semaphore
+<ul>
+<li>适用于对特定资源需要控制能够并发访问资源的线程个数。需要先执行acquire方法获取许可证，如果获取成功后线程才能往下继续执行，否则只能阻塞等待；使用完后需要
+用release方法归还许可</li>
+</ul>
+</li>
+<li>数据交换Exchanger
+<ul>
+<li>为两个线程提供了一个同步点，当两个线程都达到了同步点之后就可以使用exchange方法，互相交换数据；如果一个线程先达到了同步点，会在同步点阻塞等待直到另外一个线程也到达同步点</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<h2 id="并发实践">并发实践</h2>
+<ul>
+<li>生产者-消费者问题
+<ol>
+<li>使用Object的wait/notifyAll方式实现
+<ul>
+<li>使用Object的消息通知机制可能存在的问题
+<ul>
+<li>notify过早，wait线程无法再获取到通知以至于一直阻塞等待。解决办法：添加状态标志</li>
+<li>wait条件变化。解决方法：使用while进行wait条件的判断，而不是在if中进行判断</li>
+<li>“假死”状态：使用notifyAll而不是notify</li>
+</ul>
+</li>
+<li>标准范式
+<ul>
+<li>永远在while中对wait条件进行判断，而不是在if中进行判断</li>
+<li>使用notifyAll进行通知，而不要使用notify进行通知</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用lock的condition的await/signalAll方式实现</li>
+<li>使用blockingQueue方式实现
+<ul>
+<li>由于BlockingQueue有可阻塞的插入和删除数据的put和take方法，因此，在实现上比使用Object和lock的方式更加简洁</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-08-31</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/java_concurrent/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.rua.run/java_concurrent/" data-title="java_concurrent"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/java/">java</a>,&nbsp;<a href="/tags/concurrent/">concurrent</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/dynamic-log-level/" class="prev" rel="prev" title="动态日志级别"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>动态日志级别</a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.101.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">javen</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["jiewenli"],"clientID":"b0c89c91ba96c871dcd0","clientSecret":"6c7737a57d40d4fc17f75962b9db3b36d9c88265","id":"2022-08-31T22:39:29+08:00","owner":"jiewenli","repo":"jiewenli.github.io","title":"java_concurrent"}},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"},"twemoji":true};</script><script type="text/javascript" src="/js/theme.min.9e0af26d07ef470e0d850462fcb087fccb1971e3f2978405eceab01351a2028b.js" integrity="sha256-ngrybQfvRw4NhQRi/LCH/MsZcePyl4QF7OqwE1GiAos="></script></body>
+</html>
