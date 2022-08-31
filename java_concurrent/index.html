@@ -4,15 +4,15 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <title>java_concurrent - blog</title><meta name="Description" content="网站描述, 用于 RSS, SEO, Open Graph 和 Twitter Cards"><meta property="og:title" content="java_concurrent" />
+        <title>JAVA并发 - blog</title><meta name="Description" content="网站描述, 用于 RSS, SEO, Open Graph 和 Twitter Cards"><meta property="og:title" content="JAVA并发" />
 <meta property="og:description" content="JAVA并发 基础知识 并发编程的优缺点 为什么要用到并发（优点） 充分利用多核CPU的运算能力 方便业务拆分 并发编程的缺点 频繁的上下文切换 线程安全（" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.rua.run/java_concurrent/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-08-31T22:39:29+08:00" />
-<meta property="article:modified_time" content="2022-08-31T22:39:29+08:00" /><meta property="og:site_name" content="网站标题, 用于 Open Graph 和 Twitter Cards" />
+<meta property="article:modified_time" content="2022-08-31T23:59:39+08:00" /><meta property="og:site_name" content="网站标题, 用于 Open Graph 和 Twitter Cards" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="java_concurrent"/>
+<meta name="twitter:title" content="JAVA并发"/>
 <meta name="twitter:description" content="JAVA并发 基础知识 并发编程的优缺点 为什么要用到并发（优点） 充分利用多核CPU的运算能力 方便业务拆分 并发编程的缺点 频繁的上下文切换 线程安全（"/>
 <meta name="application-name" content="blog">
 <meta name="apple-mobile-web-app-title" content="blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -23,13 +23,13 @@
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "java_concurrent",
+        "headline": "JAVA并发",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/blog.rua.run\/java_concurrent\/"
-        },"genre": "posts","keywords": "java, concurrent","wordcount":  8875 ,
-        "url": "https:\/\/blog.rua.run\/java_concurrent\/","datePublished": "2022-08-31T22:39:29+08:00","dateModified": "2022-08-31T22:39:29+08:00","publisher": {
+        },"genre": "posts","keywords": "java, concurrent","wordcount":  8865 ,
+        "url": "https:\/\/blog.rua.run\/java_concurrent\/","datePublished": "2022-08-31T22:39:29+08:00","dateModified": "2022-08-31T23:59:39+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -99,10 +99,10 @@
     </div><main class="main">
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">java_concurrent</h1><div class="post-meta">
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">JAVA并发</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>javen</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-08-31">2022-08-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;8875 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-08-31">2022-08-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;8865 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;18 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
@@ -111,15 +111,75 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#基础知识">基础知识</a></li>
-    <li><a href="#并发理论jmm">并发理论（JMM）</a></li>
-    <li><a href="#并发关键字">并发关键字</a></li>
-    <li><a href="#lock体系">Lock体系</a></li>
-    <li><a href="#并发容器">并发容器</a></li>
-    <li><a href="#线程池executor体系">线程池（Executor体系）</a></li>
-    <li><a href="#原子操作类">原子操作类</a></li>
-    <li><a href="#并发工具">并发工具</a></li>
-    <li><a href="#并发实践">并发实践</a></li>
+    <li><a href="#基础知识">基础知识</a>
+      <ul>
+        <li><a href="#并发编程的优缺点">并发编程的优缺点</a></li>
+        <li><a href="#线程的状态和基本操作">线程的状态和基本操作</a></li>
+      </ul>
+    </li>
+    <li><a href="#并发理论-jmm">并发理论 JMM</a>
+      <ul>
+        <li><a href="#jmm内存模型">JMM内存模型</a></li>
+        <li><a href="#重排序">重排序</a></li>
+        <li><a href="#happens-before规则">happens-before规则</a></li>
+      </ul>
+    </li>
+    <li><a href="#并发关键字">并发关键字</a>
+      <ul>
+        <li><a href="#synchronized"><em><strong>synchronized</strong></em></a></li>
+        <li><a href="#volatile"><em><strong>volatile</strong></em></a></li>
+        <li><a href="#final">final</a></li>
+        <li><a href="#三大性质">三大性质</a></li>
+      </ul>
+    </li>
+    <li><a href="#lock体系">Lock体系</a>
+      <ul>
+        <li><a href="#lock与synchronized的比较">Lock与synchronized的比较</a></li>
+        <li><a href="#aqs"><em><strong>AQS</strong></em></a></li>
+        <li><a href="#aqs源码解析">AQS源码解析</a></li>
+        <li><a href="#locksupport"><em><strong>LockSupport</strong></em></a></li>
+      </ul>
+    </li>
+    <li><a href="#并发容器">并发容器</a>
+      <ul>
+        <li><a href="#concurrenthashmap">concurrentHashMap</a></li>
+        <li><a href="#copyonwritearraylist">CopyOnWriteArrayList</a></li>
+        <li><a href="#threadlocal">ThreadLocal</a></li>
+        <li><a href="#blockingqueue">BlockingQueue</a></li>
+        <li><a href="#concurrentlinkedqueue">ConcurrentLinkedQueue</a></li>
+      </ul>
+    </li>
+    <li><a href="#线程池executor体系">线程池（Executor体系）</a>
+      <ul>
+        <li><a href="#threadpoolexecutor">ThreadPoolExecutor</a></li>
+        <li><a href="#scheduledthreadpoolexecutor">ScheduledThreadPoolExecutor</a></li>
+        <li><a href="#futuretask">FutureTask</a></li>
+      </ul>
+    </li>
+    <li><a href="#原子操作类">原子操作类</a>
+      <ul>
+        <li><a href="#实现原理">实现原理</a></li>
+        <li><a href="#原子更新基本类型">原子更新基本类型</a></li>
+        <li><a href="#原子更新数组类型">原子更新数组类型</a></li>
+        <li><a href="#原子更新引用类型">原子更新引用类型</a></li>
+        <li><a href="#原子更新字段类型">原子更新字段类型</a></li>
+      </ul>
+    </li>
+    <li><a href="#并发工具">并发工具</a>
+      <ul>
+        <li><a href="#倒计时器countdownlatch">倒计时器CountDownLatch</a></li>
+        <li><a href="#循环栅栏cyclicbarrier">循环栅栏CyclicBarrier</a></li>
+        <li><a href="#countdownlatch和cyclicbarrier的比较">CountDownLatch和CyclicBarrier的比较</a></li>
+        <li><a href="#资源访问控制semaphore">资源访问控制Semaphore</a></li>
+        <li><a href="#数据交换exchanger">数据交换Exchanger</a></li>
+      </ul>
+    </li>
+    <li><a href="#并发实践">并发实践</a>
+      <ul>
+        <li><a href="#生产者-消费者问题">生产者-消费者问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#相关阅读">相关阅读</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><h1 id="java并发">JAVA并发</h1>
@@ -127,7 +187,8 @@
 <li>
 <h2 id="基础知识">基础知识</h2>
 <ol>
-<li>并发编程的优缺点
+<li>
+<h3 id="并发编程的优缺点">并发编程的优缺点</h3>
 <ol>
 <li>为什么要用到并发（优点）
 <ul>
@@ -151,14 +212,15 @@
 </li>
 </ol>
 </li>
-<li>线程的状态和基本操作
+<li>
+<h3 id="线程的状态和基本操作">线程的状态和基本操作</h3>
 <ol>
 <li>如何新建线程
 <ul>
 <li>继承Thread类</li>
 <li>实现Runnable接口</li>
 <li>实现Callable接口</li>
-<li>几种新建线程方式的比较</li>
+<li><em><strong>几种新建线程方式的比较</strong></em></li>
 </ul>
 </li>
 <li>线程状态的转换
@@ -176,12 +238,12 @@
 <li>interrupt
 <ul>
 <li>抛出InterruptedException异常时，会清除中断标志位</li>
-<li>interrupt(), interrupted(), isInterrupt()</li>
+<li><em><strong>interrupt(), interrupted(), isInterrupt()</strong></em></li>
 </ul>
 </li>
 <li>sleep
 <ul>
-<li>sleep与wait的区别</li>
+<li><em><strong>sleep与wait的区别</strong></em></li>
 </ul>
 </li>
 <li>join</li>
@@ -192,15 +254,16 @@
 </li>
 </ul>
 </li>
-<li>守护线程Daemon</li>
+<li><em><strong>守护线程Daemon</strong></em></li>
 </ol>
 </li>
 </ol>
 </li>
 <li>
-<h2 id="并发理论jmm">并发理论（JMM）</h2>
+<h2 id="并发理论-jmm">并发理论 JMM</h2>
 <ol>
-<li>JMM内存模型
+<li>
+<h3 id="jmm内存模型">JMM内存模型</h3>
 <ol>
 <li>哪些是共享数据
 <ul>
@@ -217,7 +280,8 @@
 </li>
 </ol>
 </li>
-<li>重排序
+<li>
+<h3 id="重排序">重排序</h3>
 <ol>
 <li>什么是重排序
 <ul>
@@ -234,20 +298,19 @@
 </li>
 </ol>
 </li>
-<li>happens-before规则
+<li>
+<h3 id="happens-before规则">happens-before规则</h3>
 <ol>
 <li>定义
 <ul>
 <li>如果A happens-before B，则A操作的结果对操作B可见，且A操作在操作B之前执行</li>
-<li>如果指令重排序之后的结果，与按照happens-before关系执行的结果一致，
-则指令可以重排序</li>
+<li>如果指令重排序之后的结果，与按照happens-before关系执行的结果一致，则指令可以重排序</li>
 </ul>
 </li>
 <li>理解
 <ul>
 <li>站在程序员角度：为编程人员提供了一个类似强内存的内存结构，方便编程</li>
-<li>站在编译器和处理器厂商：在不影响正确结果的前提下，可以让编译器
-和处理器厂商尽情优化</li>
+<li>站在编译器和处理器厂商：在不影响正确结果的前提下，可以让编译器和处理器厂商尽情优化</li>
 </ul>
 </li>
 <li>具体规则
@@ -269,20 +332,29 @@
 <li>
 <h2 id="并发关键字">并发关键字</h2>
 <ol>
-<li>synchronized
+<li>
+<h3 id="synchronized"><em><strong>synchronized</strong></em></h3>
 <ol>
 <li>如何使用？
-实例方法（锁的是实例对象）
-静态方法（锁的是类对象）
-代码块根据配置，锁的是实例对象也可以是类对象</li>
+<ul>
+<li>实例方法（锁的是实例对象）</li>
+<li>静态方法（锁的是类对象）</li>
+<li>代码块根据配置，锁的是实例对象也可以是类对象</li>
+</ul>
+</li>
 <li>moniter机制
-字节码中会添加monitorenter和monitorexit指令
-锁的重入性：同一个锁程，不需要再次申请获取锁</li>
+<ul>
+<li>字节码中会添加monitorenter和monitorexit指令</li>
+<li>锁的重入性：同一个锁程，不需要再次申请获取锁</li>
+</ul>
+</li>
 <li>synchronized的happens-before关系</li>
 <li>synchronized的内存语义
-共享变量会刷新到主存中，线程每次会从主存中
-读取最新的值到自身的工作内存中</li>
-<li>锁优化
+<ul>
+<li>共享变量会刷新到主存中，线程每次会从主存中读取最新的值到自身的工作内存中</li>
+</ul>
+</li>
+<li><em><strong>锁优化</strong></em>
 <ul>
 <li>锁状态
 <ul>
@@ -309,7 +381,7 @@
 </li>
 </ul>
 </li>
-<li>锁升级策略
+<li><em><strong>锁升级策略</strong></em>
 <ul>
 <li>轻量级锁
 <ul>
@@ -324,12 +396,17 @@
 </ul>
 </li>
 <li>重量级锁</li>
-<li>各种锁的比较</li>
+<li><em><strong>各种锁的比较</strong></em></li>
 </ul>
 </li>
 </ol>
+<ul>
+<li><a href="https://tech.youzan.com/javasuo-yu-xian-cheng-de-na-xie-shi/" target="_blank" rel="noopener noreffer ">Java锁与线程的那些事</a></li>
+<li><a href="https://www.cnblogs.com/wuqinglong/p/9945618.html" target="_blank" rel="noopener noreffer ">Java6及以上版本对synchronized的优化</a></li>
+</ul>
 </li>
-<li>volatile
+<li>
+<h3 id="volatile"><em><strong>volatile</strong></em></h3>
 <ol>
 <li>实现原理
 <ul>
@@ -340,8 +417,7 @@
 <li>happens-before关系的推导</li>
 <li>内存语义
 <ul>
-<li>写volatile变量会重新刷新到主存中，其他线程读volatile变量
-会重新从主存中读取最新值</li>
+<li>写volatile变量会重新刷新到主存中，其他线程读volatile变量会重新从主存中读取最新值</li>
 </ul>
 </li>
 <li>内存语义的实现
@@ -351,7 +427,8 @@
 </li>
 </ol>
 </li>
-<li>final
+<li>
+<h3 id="final">final</h3>
 <ol>
 <li>如何使用
 <ul>
@@ -394,7 +471,8 @@
 <li>finla引用不能从构造函数函数中“溢出”(this逃逸)</li>
 </ol>
 </li>
-<li>三大性质
+<li>
+<h3 id="三大性质">三大性质</h3>
 <ul>
 <li>原子性
 <ul>
@@ -420,52 +498,57 @@
 <li>
 <h2 id="lock体系">Lock体系</h2>
 <ol>
-<li>Lock与synchronized的比较
-Lock提供了基于API的可操作性，提供能可响应中断式
-获取锁，超时获取锁以及非阻塞式获取锁的特性
-synchronized执行完同步块以及遇到异常会自动释放锁，
-而Lock要显示的调用unlock方法释放锁</li>
-<li>AQS
+<li>
+<h3 id="lock与synchronized的比较">Lock与synchronized的比较</h3>
+<ul>
+<li>Lock提供了基于API的可操作性，提供能可响应中断式获取锁，超时获取锁以及非阻塞式获取锁的特性</li>
+<li>synchronized执行完同步块以及遇到异常会自动释放锁，而Lock要显示的调用unlock方法释放锁</li>
+</ul>
+</li>
+<li>
+<h3 id="aqs"><em><strong>AQS</strong></em></h3>
 <ol>
 <li>设计意图（模板方法设计模式）
-AQS提供给同步组件实现者，为其屏蔽了同步状态的管理，线程排队等底层操作
-实现者只需要通过AQS提供的模板方法实现同步组件的语义即可
-lock（同步组件）是面向使用者的，定义了接口，
-隐藏了实现细节</li>
+<ul>
+<li>AQS提供给同步组件实现者，为其屏蔽了同步状态的管理，线程排队等底层操作实现者只需要通过AQS提供的模板方法实现同步组件的语义即可</li>
+<li>lock（同步组件）是面向使用者的，定义了接口，隐藏了实现细节</li>
+</ul>
+</li>
 <li>如何使用AQS实现自定义同步组件
-重写protected方法，告诉AQS如何判断当前
-同步状态获取是否成功或者失败
-同步组件调用AQS的模板方法，实现同步语义。而提供的模板方法
-又会调用被重写的方法
-实现自定义同步组件时，推荐采用继承AQS的静态内部类</li>
+<ul>
+<li>重写protected方法，告诉AQS如何判断当前同步状态获取是否成功或者失败</li>
+<li>同步组件调用AQS的模板方法，实现同步语义。而提供的模板方法又会调用被重写的方法</li>
+<li>实现自定义同步组件时，推荐采用继承AQS的静态内部类</li>
+</ul>
+</li>
 <li>可重写的方法</li>
-<li>AQS提供的模板方法</li>
+<li><em><strong>AQS提供的模板方法</strong></em></li>
 </ol>
 </li>
-<li>AQS源码解析
+<li>
+<h3 id="aqs源码解析">AQS源码解析</h3>
 <ol>
 <li>AQS同步队列的数据结构
 <ul>
 <li>带头结点的双向链表实现的队列</li>
 </ul>
 </li>
-<li>独占式锁
+<li><em><strong>独占式锁</strong></em>
 <ul>
 <li>同步状态获取成功则退出；失败则通过addWaiter方法将当前线程</li>
 <li>封装成节点加入同步队列，acquireQueued方法使得当前线程等待获取同步状态</li>
-<li>如果获取同步状态并且是同步队列中的头结点，则表明获取锁成功，
-并唤醒后继结点</li>
+<li>如果获取同步状态并且是同步队列中的头结点，则表明获取锁成功，并唤醒后继结点</li>
 <li>可响应中断式获取锁以及超时获取锁特性的实现原理</li>
 </ul>
 </li>
-<li>共享式锁
+<li><em><strong>共享式锁</strong></em>
 <ul>
 <li>锁获取原理</li>
 <li>锁释放原理</li>
 <li>可响应中断式获取锁以及可超时获取锁特性的实现原理</li>
 </ul>
 </li>
-<li>ReentrantLock
+<li><em><strong>ReentrantLock</strong></em>
 <ol>
 <li>重入锁的实现原理</li>
 <li>公平锁的实现原理</li>
@@ -473,7 +556,7 @@ lock（同步组件）是面向使用者的，定义了接口，
 <li>公平锁和非公平锁的比较</li>
 </ol>
 </li>
-<li>ReentrantReadWriteLock
+<li><em><strong>ReentrantReadWriteLock</strong></em>
 <ol>
 <li>如何表示读写状态的
 低16位用来表示写状态，高16位用来表示读状态</li>
@@ -493,7 +576,7 @@ WriteLock可以通过newCondition方法生成Condition等待队列，
 适用于读多写少的应用场景，比如缓存设计上</li>
 </ol>
 </li>
-<li>Condition机制
+<li><em><strong>Condition机制</strong></em>
 <ol>
 <li>与Object的wait/notify机制相比
 具有的特性
@@ -514,23 +597,22 @@ Condition能够支持设置超时时间的await，而Object不能</li>
 <li>await和signal/signalAll的结合使用</li>
 </ol>
 </li>
-<li>LockSupport
-<ol>
-<li>主要功能
-可阻塞线程以及唤醒线程，功能实现依赖于Unsafe类</li>
-<li>与synchronized阻塞唤醒相比具有的特色
-LockSupport通过LockSupport.unpark(thread)可以指定
-哪个线程被唤醒，而synchronized不能</li>
-</ol>
+<li>
+<h3 id="locksupport"><em><strong>LockSupport</strong></em></h3>
 </li>
 </ol>
 </li>
 </ol>
+<ul>
+<li><a href="https://www.cnblogs.com/waterystone/p/4920797.html" target="_blank" rel="noopener noreffer ">Java并发之AQS详解</a></li>
+<li><a href="https://www.cnblogs.com/chengxiao/archive/2017/07/24/7141160.html" target="_blank" rel="noopener noreffer ">Java并发包基石-AQS详解</a></li>
+</ul>
 </li>
 <li>
 <h2 id="并发容器">并发容器</h2>
 <ol>
-<li>concurrentHashMap
+<li>
+<h3 id="concurrenthashmap">concurrentHashMap</h3>
 <ol>
 <li>关键属性
 <ul>
@@ -584,7 +666,8 @@ LockSupport通过LockSupport.unpark(thread)可以指定
 </li>
 </ol>
 </li>
-<li>CopyOnWriteArrayList
+<li>
+<h3 id="copyonwritearraylist">CopyOnWriteArrayList</h3>
 <ol>
 <li>实现原理
 <ul>
@@ -629,7 +712,8 @@ volatile的。因此数据更新只有当volatile引用指向新数组时才会�
 </li>
 </ol>
 </li>
-<li>ThreadLocal
+<li>
+<h3 id="threadlocal">ThreadLocal</h3>
 <ol>
 <li>实现思想
 采用“空间换时间的”思想，每个线程拥有变量副本，达到
@@ -718,7 +802,8 @@ ThreadLocalMap引用链关系，ThreadLocal也不会被GC掉，反而会程序�
 </li>
 </ol>
 </li>
-<li>BlockingQueue
+<li>
+<h3 id="blockingqueue">BlockingQueue</h3>
 <ol>
 <li>BlockingQueue的基本操作</li>
 <li>常用的BlockingQueue
@@ -742,7 +827,8 @@ ThreadLocalMap引用链关系，ThreadLocal也不会被GC掉，反而会程序�
 </li>
 </ol>
 </li>
-<li>ConcurrentLinkedQueue
+<li>
+<h3 id="concurrentlinkedqueue">ConcurrentLinkedQueue</h3>
 <ol>
 <li>实现原理
 主要采用CAS操作以保证线程安全，并且采用了延时更新的策略，提高吞吐量</li>
@@ -760,7 +846,8 @@ poll方法实现原理</li>
 <li>
 <h2 id="线程池executor体系">线程池（Executor体系）</h2>
 <ol>
-<li>ThreadPoolExecutor
+<li>
+<h3 id="threadpoolexecutor">ThreadPoolExecutor</h3>
 <ol>
 <li>为什么要使用线程池
 <ul>
@@ -809,7 +896,8 @@ poll方法实现原理</li>
 </li>
 </ol>
 </li>
-<li>ScheduledThreadPoolExecutor
+<li>
+<h3 id="scheduledthreadpoolexecutor">ScheduledThreadPoolExecutor</h3>
 <ol>
 <li>UML（类结构）
 继承了ThreadPoolExecutor，并实现了ScheduledExecutorService</li>
@@ -833,20 +921,36 @@ poll方法实现原理</li>
 </li>
 </ol>
 </li>
-<li>FutureTask
+<li>
+<h3 id="futuretask">FutureTask</h3>
 <ol>
 <li>FutureTask的几种状态
-未启动（还未执行run方法），已启动(已执行run方法），已结束（正常结束，被取消，出现异常）</li>
+<ul>
+<li>未启动（还未执行run方法），已启动(已执行run方法），已结束（正常结束，被取消，出现异常）</li>
+</ul>
+</li>
 <li>get()
-未启动和已启动状态，get方法会阻塞当前线程直到异步任务执行结束</li>
+<ul>
+<li>未启动和已启动状态，get方法会阻塞当前线程直到异步任务执行结束</li>
+</ul>
+</li>
 <li>cancel()
-未启动状态时，调用cancel方法后该异步任务永远不会再执行
-已启动状态，调用cancel方法后根据参数是否中断当前执行任务的线程
-已结束状态，调用cancel方法时会返回false</li>
+<ul>
+<li>未启动状态时，调用cancel方法后该异步任务永远不会再执行</li>
+<li>已启动状态，调用cancel方法后根据参数是否中断当前执行任务的线程</li>
+<li>已结束状态，调用cancel方法时会返回false</li>
+</ul>
+</li>
 <li>应用场景
-当一个线程需要等到另一个任务执行结束后才能继续进行时，可以使用futureTask</li>
+<ul>
+<li>当一个线程需要等到另一个任务执行结束后才能继续进行时，可以使用futureTask</li>
+</ul>
+</li>
 <li>实现了Runnable接口
-futureTask同样可以交由executor执行，获取直接调用run方法执行</li>
+<ul>
+<li>futureTask同样可以交由executor执行，获取直接调用run方法执行</li>
+</ul>
+</li>
 </ol>
 </li>
 </ol>
@@ -854,27 +958,32 @@ futureTask同样可以交由executor执行，获取直接调用run方法执行</
 <li>
 <h2 id="原子操作类">原子操作类</h2>
 <ol>
-<li>实现原理
+<li>
+<h3 id="实现原理">实现原理</h3>
 <ul>
 <li>借住与Unsafe类的CAS操作，达到并发安全的目的</li>
 </ul>
 </li>
-<li>原子更新基本类型
+<li>
+<h3 id="原子更新基本类型">原子更新基本类型</h3>
 <ul>
 <li>AtomicInteger， AtomicLong，AtomicBoolean</li>
 </ul>
 </li>
-<li>原子更新数组类型
+<li>
+<h3 id="原子更新数组类型">原子更新数组类型</h3>
 <ul>
 <li>AtomicIntegerArray，AtomicLongArray，AtomicReferenceArray</li>
 </ul>
 </li>
-<li>原子更新引用类型
+<li>
+<h3 id="原子更新引用类型">原子更新引用类型</h3>
 <ul>
 <li>AtomicReference，AtomicReferenceFieldUpdater，AtomicMarkableReference</li>
 </ul>
 </li>
-<li>原子更新字段类型
+<li>
+<h3 id="原子更新字段类型">原子更新字段类型</h3>
 <ul>
 <li>AtomicIntegerFieldUpdater，AtomicLongUpdater，AtomicStampedReference</li>
 </ul>
@@ -884,15 +993,18 @@ futureTask同样可以交由executor执行，获取直接调用run方法执行</
 <li>
 <h2 id="并发工具">并发工具</h2>
 <ol>
-<li>倒计时器CountDownLatch
-当CountDownLatch维护的计数器减至为0的时候，调用await方法的线程
-才会继续往下执行，否则会阻塞等待
-适用于一个线程需要等待其他多个线程执行结果的应用场景
-操作系统</li>
-<li>循环栅栏CyclicBarrier
-当一组线程都达到了“临界点”时，所有的线程才能继续往前执行，否则
-阻塞等待</li>
-<li>CountDownLatch和CyclicBarrier的比较
+<li>
+<h3 id="倒计时器countdownlatch">倒计时器CountDownLatch</h3>
+<ul>
+<li>当CountDownLatch维护的计数器减至为0的时候，调用await方法的线程才会继续往下执行，否则会阻塞等待</li>
+<li>适用于一个线程需要等待其他多个线程执行结果的应用场景操作系统</li>
+</ul>
+</li>
+<li>
+<h3 id="循环栅栏cyclicbarrier">循环栅栏CyclicBarrier</h3>
+-当一组线程都达到了“临界点”时，所有的线程才能继续往前执行，否则阻塞等待</li>
+<li>
+<h3 id="countdownlatch和cyclicbarrier的比较">CountDownLatch和CyclicBarrier的比较</h3>
 <ol>
 <li>CyclicBarrier能够复用，而CountDownLatch维护的倒计数器不能复用</li>
 <li>CyclicBarrier会在await处阻塞等待，而CountDownLatch在await出不会阻塞等待</li>
@@ -900,13 +1012,15 @@ futureTask同样可以交由executor执行，获取直接调用run方法执行</
 查询当前状态，而CountDownLatch提供的方法较少</li>
 </ol>
 </li>
-<li>资源访问控制Semaphore
+<li>
+<h3 id="资源访问控制semaphore">资源访问控制Semaphore</h3>
 <ul>
-<li>适用于对特定资源需要控制能够并发访问资源的线程个数。需要先执行acquire方法获取许可证，如果获取成功后线程才能往下继续执行，否则只能阻塞等待；使用完后需要
-用release方法归还许可</li>
+<li>适用于对特定资源需要控制能够并发访问资源的线程个数。需要先执行acquire方法获取许可证，如果获取成功后线程才能往下继续执行，否则只能阻塞等待；使用完后需要</li>
+<li>用release方法归还许可</li>
 </ul>
 </li>
-<li>数据交换Exchanger
+<li>
+<h3 id="数据交换exchanger">数据交换Exchanger</h3>
 <ul>
 <li>为两个线程提供了一个同步点，当两个线程都达到了同步点之后就可以使用exchange方法，互相交换数据；如果一个线程先达到了同步点，会在同步点阻塞等待直到另外一个线程也到达同步点</li>
 </ul>
@@ -916,7 +1030,8 @@ futureTask同样可以交由executor执行，获取直接调用run方法执行</
 <li>
 <h2 id="并发实践">并发实践</h2>
 <ul>
-<li>生产者-消费者问题
+<li>
+<h3 id="生产者-消费者问题">生产者-消费者问题</h3>
 <ol>
 <li>使用Object的wait/notifyAll方式实现
 <ul>
@@ -945,7 +1060,16 @@ futureTask同样可以交由executor执行，获取直接调用run方法执行</
 </li>
 </ul>
 </li>
+<li>
+<h2 id="相关阅读">相关阅读</h2>
+<ul>
+<li><a href="https://tobebetterjavaer.com/thread/wangzhe-thread.html" target="_blank" rel="noopener noreffer ">tobebetterjavaer并发编程</a></li>
+<li><a href="https://github.com/CL0610/Java-concurrency" target="_blank" rel="noopener noreffer ">Java并发专题</a></li>
 </ul>
+</li>
+</ul>
+<hr>
+<p>&lt;仅供个人收藏学习&gt;</p>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
@@ -957,7 +1081,7 @@ futureTask同样可以交由executor执行，获取直接调用run方法执行</
                             <a class="link-to-markdown" href="/java_concurrent/index.md" target="_blank">Read Markdown</a>
                         </span></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.rua.run/java_concurrent/" data-title="java_concurrent"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+                <span></span>
             </div>
         </div>
     </div>
@@ -985,5 +1109,5 @@ futureTask同样可以交由executor执行，获取直接调用run方法执行</
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
                 <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
             </a>
-        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["jiewenli"],"clientID":"b0c89c91ba96c871dcd0","clientSecret":"6c7737a57d40d4fc17f75962b9db3b36d9c88265","id":"2022-08-31T22:39:29+08:00","owner":"jiewenli","repo":"jiewenli.github.io","title":"java_concurrent"}},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"},"twemoji":true};</script><script type="text/javascript" src="/js/theme.min.9e0af26d07ef470e0d850462fcb087fccb1971e3f2978405eceab01351a2028b.js" integrity="sha256-ngrybQfvRw4NhQRi/LCH/MsZcePyl4QF7OqwE1GiAos="></script></body>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/css/lightgallery-bundle.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/lightgallery.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/thumbnail/lg-thumbnail.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lightgallery@2.5.0/plugins/zoom/lg-zoom.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":80},"comment":{"gitalk":{"admin":["jiewenli"],"clientID":"b0c89c91ba96c871dcd0","clientSecret":"6c7737a57d40d4fc17f75962b9db3b36d9c88265","id":"2022-08-31T22:39:29+08:00","owner":"jiewenli","repo":"jiewenli.github.io","title":"JAVA并发"}},"lightgallery":true,"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.9e0af26d07ef470e0d850462fcb087fccb1971e3f2978405eceab01351a2028b.js" integrity="sha256-ngrybQfvRw4NhQRi/LCH/MsZcePyl4QF7OqwE1GiAos="></script></body>
 </html>
